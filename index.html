@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinoGlow Mini App</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        body {
+            background: #0d0221;
+            color: #ffffff;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* Koinot va yulduzlar animatsiyasi foni */
+        .universe-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1b053a 0%, #05010d 100%);
+            z-index: -2;
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            animation: twinkle 20s linear infinite;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; transform: scale(1.05); }
+            100% { opacity: 0.6; }
+        }
+
+        /* Yarim oy obyekti */
+        .moon {
+            position: fixed;
+            top: 40px;
+            right: 30px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            box-shadow: 10px 10px 0 0 #f4e8ff;
+            opacity: 0.8;
+            filter: drop-shadow(0 0 15px #9d4edd);
+            z-index: -1;
+        }
+
+        /* Til Tanlash Sahifasi (Oyna) */
+        #language-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #0d0221;
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .lang-btn {
+            width: 220px;
+            padding: 15px;
+            background: rgba(157, 78, 221, 0.2);
+            border: 2px solid #9d4edd;
+            border-radius: 30px;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+            transition: 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: #ff007f;
+            border-color: #ff007f;
+            box-shadow: 0 0 15px #ff007f;
+        }
+
+        /* Yuqori qism va logotip */
+        .header {
+            text-align: center;
+            padding: 20px 15px;
+        }
+
+        .bot-logo {
+            font-size: 26px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            text-shadow: 0 0 10px #9d4edd, 0 0 20px #240046;
+        }
+
+        .bot-logo span {
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f;
+        }
+
+        /* Qidiruv paneli */
+        .search-container {
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            width: 100%;
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 25px;
+            color: white;
+            outline: none;
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+
+        .search-bar:focus {
+            border-color: #ff007f;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
+        }
+
+        /* Bannerlar */
+        .live-banner {
+            margin: 0 15px 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, rgba(255, 0, 127, 0.2), rgba(157, 78, 221, 0.2));
+            border: 1px solid rgba(255, 0, 127, 0.4);
+            border-radius: 15px;
+            backdrop-filter: blur(5px);
+        }
+
+        .live-badge {
+            background: #ff007f;
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 5px;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Katakchalar filtri */
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            padding: 0 15px;
+            margin-bottom: 25px;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(157, 78, 221, 0.3);
+            border-radius: 20px;
+            font-size: 14px;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .tab.active {
+            background: #9d4edd;
+            border-color: #ff007f;
+            box-shadow: 0 0 10px #9d4edd;
+        }
+
+        /* Bo'limlar boshqaruvi */
+        .page-content {
+            display: none;
+            padding: 0 15px;
+        }
+
+        .page-content.active {
+            display: block;
+        }
+
+        /* Kino Kartochkalari */
+        .section-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .movies-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .movie-card {
+            background: rgba(15, 7, 32, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+
+        .movie-img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .badge-premium {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: linear-gradient(45deg, #ffbc00, #ff007f);
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .movie-info {
+            padding: 10px;
+        }
+
+        .movie-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* VIP Tariflar */
+        .vip-card {
+            background: linear-gradient(135deg, rgba(36, 0, 70, 0.7), rgba(157, 78, 221, 0.3));
+            border: 2px solid #9d4edd;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.4);
+        }
+
+        .vip-card h3 {
+            font-size: 22px;
+            color: #ffbc00;
+            margin-bottom: 10px;
+        }
+
+        .vip-price {
+            font-size: 26px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #00f0ff;
+        }
+
+        .vip-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #9d4edd, #ff007f);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            box-shadow: 0 0 10px #ff007f;
+            cursor: pointer;
+        }
+
+        /* Musiqalar */
+        .music-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff007f;
+        }
+
+        .music-icon {
+            font-size: 24px;
+            color: #9d4edd;
+            margin-right: 15px;
+        }
+
+        /* Pastki menyu (Navbar) */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 65px;
+            background: rgba(13, 2, 33, 0.9);
+            border-top: 1px solid rgba(157, 78, 221, 0.3);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8a8194;
+            font-size: 11px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .nav-item.active {
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="universe-bg"></div>
+    <div class="stars"></div>
+    <div class="moon"></div>
+
+    <!-- TIL TANLASH OYNASI -->
+    <div id="language-overlay">
+        <div class="bot-logo" style="margin-bottom: 20px;">Kino<span>Glow</span></div>
+        <button class="lang-btn" onclick="setLanguage('uz')">🇺🇿 O'zbekcha</button>
+        <button class="lang-btn" onclick="setLanguage('ru')">🇷🇺 Русский</button>
+    </div>
+
+    <!-- ASOSIY SAHIFA -->
+    <div id="home-page" class="page-content active">
+        <div class="header">
+            <div class="bot-logo">Kino<span>Glow</span></div>
+        </div>
+
+        <div class="search-container">
+            <input type="text" id="search-input" class="search-bar" placeholder="Kino yoki serial qidirish...">
+        </div>
+
+        <div class="live-banner">
+            <p><strong id="banner-title">Musiqiy hordiq</strong><span class="live-badge">LIVE</span></p>
+            <p id="banner-text" style="font-size: 12px; color: #ccc; margin-top: 4px;">Jonli efir orqali musiqalardan zavqlaning.</p>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="tab active" id="tab-all">Hammasi</div>
+            <div class="tab" id="tab-movies">Kinolar</div>
+            <div class="tab" id="tab-series">Seriallar</div>
+        </div>
+
+        <h2 class="section-title" id="catalog-title">Katalog</h2>
+        <div class="movies-grid">
+            <div class="movie-card" onclick="openPremiumMovie('Spider Noir')">
+                <span class="badge-premium">⭐ PREMIUM</span>
+                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?w=500" class="movie-img" alt="Spider">
+                <div class="movie-info">
+                    <div class="movie-title">Spider Noir (2026)</div>
+                    <div style="font-size: 11px; color:#aaa;" class="type-series">Serial</div>
+                </div>
+            </div>
+            <div class="movie-card" onclick="openPremiumMovie('The Substance')">
+                <span class="badge-premium">⭐ PREMIUM</span>
+                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500" class="movie-img" alt="Substance">
+                <div class="movie-info">
+                    <div class="movie-title">The Substance</div>
+                    <div style="font-size: 11px; color:#aaa;" class="type-movie">Kino</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAQLANGANLAR SAHIFASI -->
+    <div id="saved-page" class="page-content">
+        <h2 class="section-title" id="saved-title" style="padding-top:20px;">Saqlanganlar</h2>
+        <p id="saved-empty" style="color: #aaa; text-align: center; margin-top: 40px;">Siz saqlagan kinolar shu yerda ko'rinadi.</p>
+    </div>
+
+    <!-- VIP SAHIFASI -->
+    <div id="vip-page" class="page-content">
+        <h2 class="section-title" id="vip-main-title" style="padding-top:20px; text-align:center; color:#ffbc00;">VIP TARIFLAR REJASI</h2>
+        <p id="vip-subtitle" style="text-align:center; font-size:13px; color:#ccc; margin-bottom:20px;">Istalgan tarifni tanlang va barcha pullik kontentlarni oching.</p>
+        
+        <div class="vip-card">
+            <h3 class="v-card-1">1 Oylik VIP</h3>
+            <p style="font-size: 12px;" class="v-desc-1">Barcha kinolarga to'liq kirish</p>
+            <div class="vip-price">100 ⭐️ Stars</div>
+            <button class="vip-btn btn-sub" onclick="payStars(100)">Obuna bo'lish</button>
+        </div>
+
+        <div class="vip-card">
+            <h3 class="v-card-2">3 Oylik VIP</h3>
+            <p style="font-size: 12px;" class="v-desc-2">Eng ko'p tanlanadigan reja</p>
+            <div class="vip-price">200 ⭐️ Stars</div>
+            <button class="vip-btn btn-sub" onclick="payStars(200)">Obuna bo'lish</button>
+        </div>
+
+        <div class="vip-card">
+            <h3 class="v-card-3">6 Oylik VIP</h3>
+            <p style="font-size: 12px;" class="v-desc-3">Uzoq muddatli qulaylik</p>
+            <div class="vip-price">400 ⭐️ Stars</div>
+            <button class="vip-btn btn-sub" onclick="payStars(400)">Obuna bo'lish</button>
+        </div>
+
+        <div class="vip-card">
+            <h3>1 Yillik VIP</h3>
+            <p style="font-size: 12px;" class="v-desc-4">Cheksiz Premium Olam 🔥</p>
+            <div class="vip-price">500 ⭐️ Stars</div>
+            <button class="vip-btn btn-sub" onclick="payStars(500)">Obuna bo'lish</button>
+        </div>
+    </div>
+
+    <!-- MUSIQALAR SAHIFASI -->
+    <div id="music-page" class="page-content">
+        <h2 class="section-title" id="music-title" style="padding-top:20px;">Musiqalar bo'limi</h2>
+        <div class="music-item">
+            <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+            <div>
+                <div>Billie Eilish — Birds of a Feather</div>
+                <div style="font-size:11px; color:#aaa;" class="m-sub">Premium Saundtrek</div>
+            </div>
+        </div>
+        <div class="music-item">
+            <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+            <div>
+                <div>Yarmak — My Country</div>
+                <div style="font-size:11px; color:#aaa;" class="m-ex">Eksklyuziv</div>
+            </div>
+        </div>
+        <div class="music-item">
+            <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+            <div>
+                <div>Navai — Eshshak</div>
+                <div style="font-size:11px; color:#aaa;" class="m-kt">Kino trek</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROFIL SAHIFASI -->
+    <div id="profile-page" class="page-content">
+        <h2 class="section-title" id="profile-title" style="padding-top:20px;">Mening Profilim</h2>
+        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center;">
+            <div style="font-size: 50px; color: #9d4edd; margin-bottom: 10px;"><i class="fas fa-user-circle"></i></div>
+            <h3 id="user-name">Foydalanuvchi</h3>
+            <p style="color: #ffbc00; font-size: 14px; margin-top: 5px;" id="user-status">Status: Oddiy foydalanuvchi</p>
+        </div>
+    </div>
+
+    <!-- NAVIGATSIYA PANELİ -->
+    <div class="navbar">
+        <div class="nav-item active" onclick="switchPage('home-page', this)"><i class="fas fa-home"></i><span id="nav-h">Asosiy</span></div>
+        <div class="nav-item" onclick="switchPage('saved-page', this)"><i class="fas fa-bookmark"></i><span id="nav-s">Saqlanganlar</span></div>
+        <div class="nav-item" onclick="switchPage('music-page', this)"><i class="fas fa-music"></i><span id="nav-m">Musiqa</span></div>
+        <div class="nav-item" onclick="switchPage('vip-page', this)"><i class="fas fa-star"></i><span>VIP</span></div>
+        <div class="nav-item" onclick="switchPage('profile-page', this)"><i class="fas fa-user"></i><span id="nav-p">Profilim</span></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let currentLang = 'uz';
+
+        const langPack = {
+            uz: {
+                search: "Kino yoki serial qidirish...",
+                b_title: "Musiqiy hordiq",
+                b_text: "Jonli efir orqali musiqalardan zavqlaning.",
+                t_all: "Hammasi", t_mov: "Kinolar", t_ser: "Seriallar",
+                catalog: "Katalog", type_m: "Kino", type_s: "Serial",
+                saved: "Saqlanganlar", saved_em: "Siz saqlagan kinolar shu yerda ko'rinadi.",
+                vip_t: "VIP TARIFLAR REJASI", vip_sub: "Istalgan tarifni tanlang va barcha pullik kontentlarni oching.",
+                v1: "1 Oylik VIP", v2: "3 Oylik VIP", v3: "6 Oylik VIP", v4: "1 Yillik VIP",
+                v_desc: "Barcha kinolarga to'liq kirish", v_desc2: "Eng ko'p tanlanadigan reja", v_desc3: "Uzoq muddatli qulaylik", v_desc4: "Cheksiz Premium Olam 🔥",
+                btn_s: "Obuna bo'lish", music: "Musiqalar bo'limi", m_sub: "Premium Saundtrek", m_ex: "Eksklyuziv", m_kt: "Kino trek",
+                prof: "Mening Profilim", status: "Status: Oddiy foydalanuvchi", status_vip: "Status: VIP A'zo ✨",
+                nav_h: "Asosiy", nav_s: "Saqlanganlar", nav_m: "Musiqa", nav_p: "Profilim",
+                pop_t: "Premium Kontent", pop_m: "filmini tomosha qilish uchun sizda VIP obuna faol bo'lishi kerak.", pop_b: "VIP sotib olish", pop_c: "Yopish",
+                pay_t: "To'lov tasdiqlash", pay_m: "Stars yozib olinadi. Davom etasizmi?", pay_ok: "Tasdiqlash", pay_can: "Bekor qilish", pay_alert: "Rahmat! VIP status faollashdi!"
+            },
+            ru: {
+                search: "Поиск фильмов или сериалов...",
+                b_title: "Музыкальный отдых",
+                b_text: "Наслаждайтесь музыкой в прямом эфире.",
+                t_all: "Все", t_mov: "Фильмы", t_ser: "Сериалы",
+                catalog: "Каталог", type_m: "Фильм", type_s: "Сериал",
+                saved: "Избранное", saved_em: "Здесь будут отображаться сохраненные вами фильмы.",
+                vip_t: "ТАРИФНЫЙ ПЛАН VIP", vip_sub: "Выберите любой тариф и откройте весь платный контент.",
+                v1: "1 Месяц VIP", v2: "3 Месяца VIP", v3: "6 Месяцев VIP", v4: "1 Год VIP",
+                v_desc: "Полный доступ ко всем фильмам", v_desc2: "Самый популярный план", v_desc3: "Долговременный комфорт", v_desc4: "Безграничный Премиум Мир 🔥",
+                btn_s: "Подписаться", music: "Музыкальный раздел", m_sub: "Премиум Саундтрек", m_ex: "Эксклюзив", m_kt: "Кино трек",
+                prof: "Мой Профиль", status: "Статус: Обычный пользователь", status_vip: "Статус: VIP Клиент ✨",
+                nav_h: "Главная", nav_s: "Избранное", nav_m: "Музыка", nav_p: "Профиль",
+                pop_t: "Премиум Контент", pop_m: "Для просмотра фильма необходимо активировать VIP подписку.", pop_b: "Купить VIP", pop_c: "Закрыть",
+                pay_t: "Подтверждение оплаты", pay_m: "Stars будет списано. Продолжить?", pay_ok: "Подтвердить", pay_can: "Отмена", pay_alert: "Спасибо! VIP статус успешно активирован!"
+            }
+        };
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const p = langPack[lang];
+            
+            document.getElementById('search-input').placeholder = p.search;
+            document.getElementById('banner-title').innerText = p.b_title;
+            document.getElementById('banner-text').innerText = p.b_text;
+            document.getElementById('tab-all').innerText = p.t_all;
+            document.getElementById('tab-movies').innerText = p.t_mov;
+            document.getElementById('tab-series').innerText = p.t_ser;
+            document.getElementById('catalog-title').innerText = p.catalog;
+            
+            document.querySelectorAll('.type-series').forEach(el => el.innerText = p.type_s);
+            document.querySelectorAll('.type-movie').forEach(el => el.innerText = p.type_m);
+            
+            document.getElementById('saved-title').innerText = p.saved;
+            document.getElementById('saved-empty').innerText = p.saved_em;
+            document.getElementById('vip-main-title').innerText = p.vip_t;
+            document.getElementById('vip-subtitle').innerText = p.vip_sub;
+            
+            document.querySelector('.v-card-1').innerText = p.v1;
+            document.querySelector('.v-card-2').innerText = p.v2;
+            document.querySelector('.v-card-3').innerText = p.v3;
+            document.querySelector('.v-desc-1').innerText = p.v_desc;
+            document.querySelector('.v-desc-2').innerText = p.v_desc2;
+            document.querySelector('.v-desc-3').innerText = p.v_desc3;
+            document.querySelector('.v-desc-4').innerText = p.v_desc4;
+            
+            document.querySelectorAll('.btn-sub').forEach(el => el.innerText = p.btn_s);
+            document.getElementById('music-title').innerText = p.music;
+            document.querySelector('.m-sub').innerText = p.m_sub;
+            document.querySelector('.m-ex').innerText = p.m_ex;
+            document.querySelector('.m-kt').innerText = p.m_kt;
+            
+            document.getElementById('profile-title').innerText = p.prof;
+            document.getElementById('nav-h').innerText = p.nav_h;
+            document.getElementById('nav-s').innerText = p.nav_s;
+            document.getElementById('nav-m').innerText = p.nav_m;
+            document.getElementById('nav-p').innerText = p.nav_p;
+            
+            const currentStatus = document.getElementById('user-status').innerText;
+            if(currentStatus.includes("VIP")) {
+                document.getElementById('user-status').innerText = p.status_vip;
+            } else {
+                document.getElementById('user-status').innerText = p.status;
+            }
+
+            document.getElementById('language-overlay').style.display = 'none';
+        }
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
+        }
+
+        function switchPage(pageId, element) {
+            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            
+            document.getElementById(pageId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        function openPremiumMovie(title) {
+            const p = langPack[currentLang];
+            tg.showPopup({
+                title: p.pop_t,
+                message: `"${title}" ${p.pop_m}`,
+                buttons: [{id: 'buy', type: 'default', text: p.pop_b}, {type: 'cancel', text: p.pop_c}]
+            }, function(buttonId) {
+                if (buttonId === 'buy') {
+                    switchPage('vip-page', document.querySelectorAll('.nav-item')[3]);
+                }
+            });
+        }
+
+        function payStars(amount) {
+            const p = langPack[currentLang];
+            tg.showPopup({
+                title: p.pay_t,
+                message: `${amount} ${p.pay_m}`,
+                buttons: [{id: 'pay', type: 'ok', text: p.pay_ok}, {type: 'cancel', text: p.pay_can}]
+            }, function(buttonId) {
+                if (buttonId === 'pay') {
+                    tg.showAlert(p.pay_alert);
+                    document.getElementById('user-status').innerText = p.status_vip;
+                    document.getElementById('user-status').style.color = "#ff007f";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
