@@ -2,63 +2,52 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>Kinoglow | Asosiy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kinoglow | Bepul Kinolar</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Dizayn qismlari */
-        body { background: #121212; color: white; font-family: sans-serif; padding-bottom: 70px; }
-        .movies-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 15px; }
-        .movie-card { background: #1e1e1e; padding: 10px; border-radius: 10px; cursor: pointer; text-align: center; }
-        .navbar { position: fixed; bottom: 0; width: 100%; background: #000; display: flex; justify-content: space-around; padding: 15px; }
+        /* SIZNING ASL CSS DIZAYNINGIZ SHU YERDA QOLADI */
+        /* (892 qatorli kodingizdagi <style> ichidagi hamma narsani shu yerga qo'ying) */
+        body { background: #0d0221; color: #ffffff; }
+        .movies-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .movie-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 12px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="home-page">
-        <h2 style="text-align:center;">Kinolar Katalogi</h2>
+    <div id="home-page" class="page-content active">
         <div id="movies-container" class="movies-grid">
-            <p style="text-align:center;">Yuklanmoqda...</p>
-        </div>
-    </div>
-
-    <div class="navbar">
-        <div onclick="location.reload()">🔄 Yangilash</div>
+            </div>
     </div>
 
     <script>
-        // 1. SheetDB API manzili (SIZNING MANZILINGIZ)
         const API_URL = "https://sheetdb.io/api/v1/cslc4pn5n9sq2";
 
-        // 2. Kinolarni yuklab olish funksiyasi
         async function loadMovies() {
             try {
                 const response = await fetch(API_URL);
-                const movies = await response.json();
+                const data = await response.json();
                 const container = document.getElementById('movies-container');
-                container.innerHTML = ""; // Yuklanmoqda yozuvini o'chirish
-
-                movies.forEach(movie => {
-                    const card = `
-                        <div class="movie-card" onclick="openKino('${movie.url}')">
-                            <h3>${movie.title}</h3>
-                            <p>Kod: ${movie.code}</p>
-                        </div>
-                    `;
-                    container.innerHTML += card;
-                });
-            } catch (error) {
-                document.getElementById('movies-container').innerHTML = "Xatolik yuz berdi!";
+                
+                container.innerHTML = data.map(m => `
+                    <div class="movie-card" onclick="window.Telegram.WebApp.openTelegramLink('${m.url}')">
+                        <div class="movie-title">${m.title}</div>
+                        <div class="movie-meta"><span>#${m.code}</span></div>
+                    </div>
+                `).join('');
+            } catch (err) {
+                console.error("Xatolik:", err);
             }
         }
 
-        // 3. Kino ochish
-        function openKino(url) {
-            window.Telegram.WebApp.openTelegramLink(url);
-        }
-
-        // Sahifa ochilganda kinolarni yuklash
-        loadMovies();
-        window.Telegram.WebApp.expand();
+        // Sahifa yuklanganda ishga tushirish
+        window.onload = loadMovies;
+        
+        // Telegram Web App init
+        let tg = window.Telegram.WebApp;
+        tg.expand();
     </script>
-</body>
-</html>
+
+    </body>
+</html> 
