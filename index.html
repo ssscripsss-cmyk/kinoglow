@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KinoGlow Mini App</title>
+    <title>Kinoglow | Bepul Kinolar va Musiqalar Olamiga Xush Kelibsiz!</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -20,10 +20,10 @@
             background: #0d0221;
             color: #ffffff;
             overflow-x: hidden;
-            padding-bottom: 80px;
+            padding-bottom: 90px;
         }
 
-        /* Koinot va yulduzlar animatsiyasi foni */
+        /* Kosmik fon */
         .universe-bg {
             position: fixed;
             top: 0;
@@ -42,30 +42,10 @@
             height: 100%;
             z-index: -1;
             background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            animation: twinkle 20s linear infinite;
+            opacity: 0.4;
         }
 
-        @keyframes twinkle {
-            0% { opacity: 0.6; }
-            50% { opacity: 1; transform: scale(1.05); }
-            100% { opacity: 0.6; }
-        }
-
-        /* Yarim oy obyekti */
-        .moon {
-            position: fixed;
-            top: 40px;
-            right: 30px;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            box-shadow: 10px 10px 0 0 #f4e8ff;
-            opacity: 0.8;
-            filter: drop-shadow(0 0 15px #9d4edd);
-            z-index: -1;
-        }
-
-        /* Til Tanlash Sahifasi (Oyna) */
+        /* Til Tanlash Oynasi */
         #language-overlay {
             position: fixed;
             top: 0;
@@ -91,20 +71,18 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
             transition: 0.3s;
         }
 
         .lang-btn:hover {
             background: #ff007f;
             border-color: #ff007f;
-            box-shadow: 0 0 15px #ff007f;
         }
 
-        /* Yuqori qism va logotip */
+        /* Header va Logo */
         .header {
             text-align: center;
-            padding: 20px 15px;
+            padding: 20px 15px 10px;
         }
 
         .bot-logo {
@@ -113,18 +91,17 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             color: #fff;
-            text-shadow: 0 0 10px #9d4edd, 0 0 20px #240046;
+            text-shadow: 0 0 10px #9d4edd;
         }
 
         .bot-logo span {
             color: #ff007f;
-            text-shadow: 0 0 10px #ff007f;
         }
 
-        /* Qidiruv paneli */
+        /* Qidiruv */
         .search-container {
             padding: 0 15px;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
 
         .search-bar {
@@ -135,33 +112,49 @@
             border-radius: 25px;
             color: white;
             outline: none;
-            backdrop-filter: blur(5px);
-            transition: 0.3s;
         }
 
-        .search-bar:focus {
-            border-color: #ff007f;
-            box-shadow: 0 0 10px rgba(255, 0, 127, 0.5);
-        }
-
-        /* Bannerlar */
+        /* LIVE YouTube Player Banner */
         .live-banner {
             margin: 0 15px 20px;
-            padding: 15px;
-            background: linear-gradient(135deg, rgba(255, 0, 127, 0.2), rgba(157, 78, 221, 0.2));
+            padding: 12px;
+            background: rgba(15, 7, 32, 0.7);
             border: 1px solid rgba(255, 0, 127, 0.4);
             border-radius: 15px;
-            backdrop-filter: blur(5px);
+        }
+
+        .live-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
         }
 
         .live-badge {
             background: #ff007f;
-            padding: 2px 6px;
+            padding: 3px 8px;
             border-radius: 5px;
             font-size: 11px;
             font-weight: bold;
-            margin-left: 5px;
             animation: pulse 1.5s infinite;
+        }
+
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 10px;
+            background: #000;
+        }
+
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
         }
 
         @keyframes pulse {
@@ -170,12 +163,12 @@
             100% { opacity: 0.6; }
         }
 
-        /* Katakchalar filtri */
+        /* Filtr tablari */
         .filter-tabs {
             display: flex;
             gap: 10px;
             padding: 0 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             overflow-x: auto;
         }
 
@@ -192,10 +185,9 @@
         .tab.active {
             background: #9d4edd;
             border-color: #ff007f;
-            box-shadow: 0 0 10px #9d4edd;
         }
 
-        /* Bo'limlar boshqaruvi */
+        /* Bo'limlar */
         .page-content {
             display: none;
             padding: 0 15px;
@@ -207,7 +199,7 @@
 
         /* Kino Kartochkalari */
         .section-title {
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 15px;
             font-weight: 600;
         }
@@ -215,112 +207,159 @@
         .movies-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
         }
 
         .movie-card {
-            background: rgba(15, 7, 32, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(157, 78, 221, 0.15);
             border-radius: 12px;
             overflow: hidden;
             position: relative;
-            backdrop-filter: blur(5px);
+            cursor: pointer;
+        }
+
+        .movie-img-container {
+            position: relative;
+            width: 100%;
+            height: 160px;
+            background: #14092b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .movie-img {
             width: 100%;
-            height: 220px;
+            height: 100%;
             object-fit: cover;
         }
 
-        .badge-premium {
+        .no-img-placeholder {
+            font-size: 32px;
+            color: rgba(157, 78, 221, 0.4);
+        }
+
+        .badge-type {
             position: absolute;
             top: 8px;
             right: 8px;
-            background: linear-gradient(45deg, #ffbc00, #ff007f);
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 11px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
             font-weight: bold;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+        }
+
+        .badge-free {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: linear-gradient(45deg, #00f0ff, #00ff66);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #000;
         }
 
         .movie-info {
-            padding: 10px;
+            padding: 8px;
         }
 
         .movie-title {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
-            margin-bottom: 5px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            margin-bottom: 4px;
         }
 
-        /* VIP Tariflar */
+        .movie-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        /* Musiqalar uslubi */
+        .music-category {
+            margin-bottom: 20px;
+        }
+
+        .category-subtitle {
+            font-size: 14px;
+            color: #ff007f;
+            margin-bottom: 10px;
+            border-left: 3px solid #ff007f;
+            padding-left: 8px;
+        }
+
+        .music-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.04);
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 1px solid rgba(157, 78, 221, 0.1);
+        }
+
+        .music-icon {
+            font-size: 20px;
+            color: #9d4edd;
+            margin-right: 12px;
+        }
+
+        .music-details h4 {
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .music-details p {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        /* VIP Tarmoq */
         .vip-card {
             background: linear-gradient(135deg, rgba(36, 0, 70, 0.7), rgba(157, 78, 221, 0.3));
-            border: 2px solid #9d4edd;
+            border: 1px solid #9d4edd;
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 15px;
+            margin-bottom: 12px;
             text-align: center;
-            box-shadow: 0 0 15px rgba(157, 78, 221, 0.4);
-        }
-
-        .vip-card h3 {
-            font-size: 22px;
-            color: #ffbc00;
-            margin-bottom: 10px;
         }
 
         .vip-price {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: bold;
-            margin: 10px 0;
+            margin: 5px 0;
             color: #00f0ff;
         }
 
         .vip-btn {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             background: linear-gradient(45deg, #9d4edd, #ff007f);
             border: none;
-            border-radius: 25px;
+            border-radius: 20px;
             color: white;
             font-weight: bold;
-            font-size: 16px;
-            box-shadow: 0 0 10px #ff007f;
             cursor: pointer;
         }
 
-        /* Musiqalar */
-        .music-item {
-            display: flex;
-            align-items: center;
-            background: rgba(255,255,255,0.05);
-            padding: 12px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            border-left: 4px solid #ff007f;
-        }
-
-        .music-icon {
-            font-size: 24px;
-            color: #9d4edd;
-            margin-right: 15px;
-        }
-
-        /* Pastki menyu (Navbar) */
+        /* Pastki Menyu */
         .navbar {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
             height: 65px;
-            background: rgba(13, 2, 33, 0.9);
-            border-top: 1px solid rgba(157, 78, 221, 0.3);
+            background: rgba(13, 2, 33, 0.95);
+            border-top: 1px solid rgba(157, 78, 221, 0.2);
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -336,17 +375,16 @@
             font-size: 11px;
             text-decoration: none;
             cursor: pointer;
-            transition: 0.3s;
         }
 
         .nav-item i {
-            font-size: 20px;
+            font-size: 18px;
             margin-bottom: 4px;
         }
 
         .nav-item.active {
             color: #ff007f;
-            text-shadow: 0 0 10px #ff007f;
+            text-shadow: 0 0 8px #ff007f;
         }
     </style>
 </head>
@@ -354,11 +392,10 @@
 
     <div class="universe-bg"></div>
     <div class="stars"></div>
-    <div class="moon"></div>
 
     <!-- TIL TANLASH OYNASI -->
     <div id="language-overlay">
-        <div class="bot-logo" style="margin-bottom: 20px;">Kino<span>Glow</span></div>
+        <div class="bot-logo">Kinoglow<span>.uz</span></div>
         <button class="lang-btn" onclick="setLanguage('uz')">🇺🇿 O'zbekcha</button>
         <button class="lang-btn" onclick="setLanguage('ru')">🇷🇺 Русский</button>
     </div>
@@ -366,42 +403,283 @@
     <!-- ASOSIY SAHIFA -->
     <div id="home-page" class="page-content active">
         <div class="header">
-            <div class="bot-logo">Kino<span>Glow</span></div>
+            <div class="bot-logo">Kinoglow<span>.uz</span></div>
         </div>
 
         <div class="search-container">
-            <input type="text" id="search-input" class="search-bar" placeholder="Kino yoki serial qidirish...">
+            <input type="text" id="search-input" class="search-bar" placeholder="Kino yoki serial qidirish..." oninput="filterContent()">
         </div>
 
+        <!-- LIVE YOUTUBE MUSIQA BANNER -->
         <div class="live-banner">
-            <p><strong id="banner-title">Musiqiy hordiq</strong><span class="live-badge">LIVE</span></p>
-            <p id="banner-text" style="font-size: 12px; color: #ccc; margin-top: 4px;">Jonli efir orqali musiqalardan zavqlaning.</p>
+            <div class="live-header">
+                <span style="font-size:13px; font-weight:bold;" id="banner-title"><i class="fas fa-headset"></i> Musiqiy hordiq</span>
+                <span class="live-badge">LIVE</span>
+            </div>
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1&loop=1&playlist=jfKfPfyJRdk" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            </div>
         </div>
 
         <div class="filter-tabs">
-            <div class="tab active" id="tab-all">Hammasi</div>
-            <div class="tab" id="tab-movies">Kinolar</div>
-            <div class="tab" id="tab-series">Seriallar</div>
+            <div class="tab active" onclick="filterTab('all', this)" id="tab-all">Hammasi</div>
+            <div class="tab" onclick="filterTab('kino', this)" id="tab-movies">Kinolar</div>
+            <div class="tab" onclick="filterTab('serial', this)" id="tab-series">Seriallar</div>
         </div>
 
         <h2 class="section-title" id="catalog-title">Katalog</h2>
-        <div class="movies-grid">
-            <div class="movie-card" onclick="openPremiumMovie('Spider Noir')">
-                <span class="badge-premium">⭐ PREMIUM</span>
-                <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?w=500" class="movie-img" alt="Spider">
+        
+        <!-- FILMLAR SETKASI -->
+        <div class="movies-grid" id="movies-container">
+            
+            <!-- 1. O'rgimchak Nuar -->
+            <div class="movie-card" data-type="serial" data-title="o'rgimchak nuar spider noir" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_454')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎬 Serial</span>
+                <div class="movie-img-container">
+                    <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400" class="movie-img" alt="Spider Noir">
+                </div>
                 <div class="movie-info">
-                    <div class="movie-title">Spider Noir (2026)</div>
-                    <div style="font-size: 11px; color:#aaa;" class="type-series">Serial</div>
+                    <div class="movie-title">O'rgimchak Nuar</div>
+                    <div class="movie-meta"><span>#454</span> <span>👁️ 1.2k</span></div>
                 </div>
             </div>
-            <div class="movie-card" onclick="openPremiumMovie('The Substance')">
-                <span class="badge-premium">⭐ PREMIUM</span>
-                <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500" class="movie-img" alt="Substance">
+
+            <!-- 2. Substansiya -->
+            <div class="movie-card" data-type="kino" data-title="substansiya the substance 2024" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_453')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container">
+                    <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" class="movie-img" alt="The Substance">
+                </div>
                 <div class="movie-info">
-                    <div class="movie-title">The Substance</div>
-                    <div style="font-size: 11px; color:#aaa;" class="type-movie">Kino</div>
+                    <div class="movie-title">Substansiya (2024)</div>
+                    <div class="movie-meta"><span>#453</span> <span>👁️ 762</span></div>
                 </div>
             </div>
+
+            <!-- 3. FARZ -->
+            <div class="movie-card" data-type="kino" data-title="farz o'zbek film premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_452')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">FARZ | O'ZBEK FILM</div>
+                    <div class="movie-meta"><span>#452</span> <span>👁️ 2.6k</span></div>
+                </div>
+            </div>
+
+            <!-- 4. Ko'zingni ochma -->
+            <div class="movie-card" data-type="kino" data-title="ko'zingni ochma o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_451')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container">
+                    <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" class="movie-img">
+                </div>
+                <div class="movie-info">
+                    <div class="movie-title">Ko'zingni ochma</div>
+                    <div class="movie-meta"><span>#451</span> <span>👁️ 710</span></div>
+                </div>
+            </div>
+
+            <!-- 5. Topdim seni 3 -->
+            <div class="movie-card" data-type="kino" data-title="topdim seni 3 qozoqfilm" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_450')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Topdim seni 3 | Qozoq</div>
+                    <div class="movie-meta"><span>#450</span> <span>👁️ 546</span></div>
+                </div>
+            </div>
+
+            <!-- 6. Apex / Cho'qqi -->
+            <div class="movie-card" data-type="kino" data-title="apex cho'qqi 2026 o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_449')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Apex / Cho'qqi (2026)</div>
+                    <div class="movie-meta"><span>#449</span> <span>👁️ 463</span></div>
+                </div>
+            </div>
+
+            <!-- 7. ULAR SENI O'LDIRADI -->
+            <div class="movie-card" data-type="kino" data-title="ular seni o'ldiradi 2026" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_447')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Ular Seni O'ldiradi</div>
+                    <div class="movie-meta"><span>#447</span> <span>👁️ 633</span></div>
+                </div>
+            </div>
+
+            <!-- 8. YOVUZ BILAN JANG -->
+            <div class="movie-card" data-type="kino" data-title="yovuz bilan jang 2026 premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_446')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Yovuz Bilan Jang</div>
+                    <div class="movie-meta"><span>#446</span> <span>👁️ 358</span></div>
+                </div>
+            </div>
+
+            <!-- 9. IFRIT - 2 -->
+            <div class="movie-card" data-type="kino" data-title="ifrit 2 o'zbek tilida premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_445')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Ifrit - 2 | Premyera</div>
+                    <div class="movie-meta"><span>#445</span> <span>👁️ 1.1k</span></div>
+                </div>
+            </div>
+
+            <!-- 10. Nomi: Ifrit kuchli iblis -->
+            <div class="movie-card" data-type="kino" data-title="nomi ifrit kuchli iblis uzbek o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_444')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Ifrit kuchli iblis</div>
+                    <div class="movie-meta"><span>#444</span> <span>👁️ 1.5k</span></div>
+                </div>
+            </div>
+
+            <!-- 11. Sevgilim sensan -->
+            <div class="movie-card" data-type="serial" data-title="sevgilim sensan yangi turk serial" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_443')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎬 Serial</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Sevgilim sensan | Turk</div>
+                    <div class="movie-meta"><span>#443</span> <span>👁️ Yangi</span></div>
+                </div>
+            </div>
+
+            <!-- 12. SWAPPED | O'RIN ALMASHGANLAR -->
+            <div class="movie-card" data-type="kino" data-title="swapped o'rin almashganlar" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_442')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">O'rin Almashganlar</div>
+                    <div class="movie-meta"><span>#442</span> <span>👁️ 106</span></div>
+                </div>
+            </div>
+
+            <!-- 13. SO'NGGI SAFAR -->
+            <div class="movie-card" data-type="serial" data-title="so'nggi safar serial" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_441')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎬 Serial</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">So'nggi Safar</div>
+                    <div class="movie-meta"><span>#441</span> <span>👁️ 0</span></div>
+                </div>
+            </div>
+
+            <!-- 14. Atirchi -->
+            <div class="movie-card" data-type="kino" data-title="atirchi bir qotilning hikoyasi perfume" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_439')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Atirchi: Qotil Hikoyasi</div>
+                    <div class="movie-meta"><span>#439</span> <span>👁️ 1.4k</span></div>
+                </div>
+            </div>
+
+            <!-- 15. Mortal Kombat 2 -->
+            <div class="movie-card" data-type="kino" data-title="mortal kombat 2 o'zbek tilida premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_438')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Mortal Kombat 2</div>
+                    <div class="movie-meta"><span>#438</span> <span>👁️ 871</span></div>
+                </div>
+            </div>
+
+            <!-- 16. Sheriklar 3 -->
+            <div class="movie-card" data-type="kino" data-title="sheriklar 3 o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_437')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Sheriklar 3</div>
+                    <div class="movie-meta"><span>#437</span> <span>👁️ 899</span></div>
+                </div>
+            </div>
+
+            <!-- 17. Jannat onalar oyog'i ostida 2 -->
+            <div class="movie-card" data-type="kino" data-title="jannat onalar oyog'i ostida 2" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_436')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Jannat onalar ostida 2</div>
+                    <div class="movie-meta"><span>#436</span> <span>👁️ 1.8k</span></div>
+                </div>
+            </div>
+
+            <!-- 18. QORA SIGAN -->
+            <div class="movie-card" data-type="serial" data-title="qora sigan o'zbek serial" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_435')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎬 Serial</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Qora Sigan | Serial</div>
+                    <div class="movie-meta"><span>#435</span> <span>👁️ 0</span></div>
+                </div>
+            </div>
+
+            <!-- 19. TIMUR (2025) -->
+            <div class="movie-card" data-type="kino" data-title="timur 2025 premyera netflix" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_432')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">TIMUR (2025) Netflix</div>
+                    <div class="movie-meta"><span>#432</span> <span>👁️ 1k</span></div>
+                </div>
+            </div>
+
+            <!-- 20. Apokalipsis 2006 -->
+            <div class="movie-card" data-type="kino" data-title="апокалипсис apokalipsis 2006" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_431')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Apokalipsis 2006</div>
+                    <div class="movie-meta"><span>#431</span> <span>👁️ 496</span></div>
+                </div>
+            </div>
+
+            <!-- 21. G'assol 3-Fasl -->
+            <div class="movie-card" data-type="serial" data-title="g'assol 3-fasl o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_430')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎬 Serial</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">G'assol 3-Fasl</div>
+                    <div class="movie-meta"><span>#430</span> <span>👁️ 0</span></div>
+                </div>
+            </div>
+
+            <!-- 22. Senga oshiqman -->
+            <div class="movie-card" data-type="kino" data-title="senga oshiqman" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_429')">
+                <span class="badge-free">FREE</span>
+                <span class="badge-type">🎥 Kino</span>
+                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+                <div class="movie-info">
+                    <div class="movie-title">Senga Oshiqman</div>
+                    <div class="movie-meta"><span>#429</span> <span>👁️ 1.6k</span></div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -413,60 +691,78 @@
 
     <!-- VIP SAHIFASI -->
     <div id="vip-page" class="page-content">
-        <h2 class="section-title" id="vip-main-title" style="padding-top:20px; text-align:center; color:#ffbc00;">VIP TARIFLAR REJASI</h2>
-        <p id="vip-subtitle" style="text-align:center; font-size:13px; color:#ccc; margin-bottom:20px;">Istalgan tarifni tanlang va barcha pullik kontentlarni oching.</p>
+        <h2 class="section-title" id="vip-main-title" style="padding-top:20px; text-align:center; color:#ffbc00;">VIP OBUNA REJALARI</h2>
+        <p id="vip-subtitle" style="text-align:center; font-size:13px; color:#ccc; margin-bottom:20px;">VIP status orqali Kinoglow loyihasini qo'llab-quvvatlang.</p>
         
         <div class="vip-card">
             <h3 class="v-card-1">1 Oylik VIP</h3>
-            <p style="font-size: 12px;" class="v-desc-1">Barcha kinolarga to'liq kirish</p>
             <div class="vip-price">100 ⭐️ Stars</div>
-            <button class="vip-btn btn-sub" onclick="payStars(100)">Obuna bo'lish</button>
+            <button class="vip-btn btn-sub" onclick="payVIP(100)">Obuna bo'lish</button>
         </div>
-
         <div class="vip-card">
-            <h3 class="v-card-2">3 Oylik VIP</h3>
-            <p style="font-size: 12px;" class="v-desc-2">Eng ko'p tanlanadigan reja</p>
-            <div class="vip-price">200 ⭐️ Stars</div>
-            <button class="vip-btn btn-sub" onclick="payStars(200)">Obuna bo'lish</button>
-        </div>
-
-        <div class="vip-card">
-            <h3 class="v-card-3">6 Oylik VIP</h3>
-            <p style="font-size: 12px;" class="v-desc-3">Uzoq muddatli qulaylik</p>
-            <div class="vip-price">400 ⭐️ Stars</div>
-            <button class="vip-btn btn-sub" onclick="payStars(400)">Obuna bo'lish</button>
-        </div>
-
-        <div class="vip-card">
-            <h3>1 Yillik VIP</h3>
-            <p style="font-size: 12px;" class="v-desc-4">Cheksiz Premium Olam 🔥</p>
+            <h3 class="v-card-2">Yillik VIP VIP</h3>
             <div class="vip-price">500 ⭐️ Stars</div>
-            <button class="vip-btn btn-sub" onclick="payStars(500)">Obuna bo'lish</button>
+            <button class="vip-btn btn-sub" onclick="payVIP(500)">Obuna bo'lish</button>
         </div>
     </div>
 
     <!-- MUSIQALAR SAHIFASI -->
     <div id="music-page" class="page-content">
-        <h2 class="section-title" id="music-title" style="padding-top:20px;">Musiqalar bo'limi</h2>
-        <div class="music-item">
-            <div class="music-icon"><i class="fas fa-play-circle"></i></div>
-            <div>
-                <div>Billie Eilish — Birds of a Feather</div>
-                <div style="font-size:11px; color:#aaa;" class="m-sub">Premium Saundtrek</div>
+        <h2 class="section-title" id="music-title" style="padding-top:20px;">Musiqalar Olamidan</h2>
+        
+        <!-- UFO -->
+        <div class="music-category">
+            <div class="category-subtitle">🛸 UFO (Barcha qo'shiqlari)</div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_ufo_1')">
+                <div class="music-icon"><i class="fas fa-music"></i></div>
+                <div class="music-details"><h4>UFO — All Night Long</h4><p>Kinoglow Music</p></div>
+            </div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_ufo_2')">
+                <div class="music-icon"><i class="fas fa-music"></i></div>
+                <div class="music-details"><h4>UFO — Restart My Heart</h4><p>Kinoglow Music</p></div>
             </div>
         </div>
-        <div class="music-item">
-            <div class="music-icon"><i class="fas fa-play-circle"></i></div>
-            <div>
-                <div>Yarmak — My Country</div>
-                <div style="font-size:11px; color:#aaa;" class="m-ex">Eksklyuziv</div>
+
+        <!-- MIYAGI -->
+        <div class="music-category">
+            <div class="category-subtitle">🎧 MIYAGI (Barcha mashhur qo'shiqlari)</div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_miyagi_1')">
+                <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+                <div class="music-details"><h4>Miyagi & Эндшпиль — I Got Love</h4><p>Top Hit</p></div>
+            </div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_miyagi_2')">
+                <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+                <div class="music-details"><h4>Miyagi — Minor</h4><p>Kinoglow Hit</p></div>
+            </div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_miyagi_3')">
+                <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+                <div class="music-details"><h4>Miyagi & Эндшпиль — Silhouette</h4><p>Yuklab olish</p></div>
             </div>
         </div>
-        <div class="music-item">
-            <div class="music-icon"><i class="fas fa-play-circle"></i></div>
-            <div>
-                <div>Navai — Eshshak</div>
-                <div style="font-size:11px; color:#aaa;" class="m-kt">Kino trek</div>
+
+        <!-- JANAGA -->
+        <div class="music-category">
+            <div class="category-subtitle">🔥 JANAGA (Barcha qo'shiqlari)</div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_janaga_1')">
+                <div class="music-icon"><i class="fas fa-heart-broken"></i></div>
+                <div class="music-details"><h4>Janaga — По полам</h4><p>Lirik xit</p></div>
+            </div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_janaga_2')">
+                <div class="music-icon"><i class="fas fa-heart-broken"></i></div>
+                <div class="music-details"><h4>Janaga — Скажи мне</h4><p>Premyera</p></div>
+            </div>
+        </div>
+
+        <!-- O'ZBEKCHA ZAMONAVIY -->
+        <div class="music-category">
+            <div class="category-subtitle">🇺🇿 O'zbekcha Zamonaviy Qo'shiqlar</div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_uz_1')">
+                <div class="music-icon"><i class="fas fa-star"></i></div>
+                <div class="music-details"><h4>Konsta — Havo</h4><p>Kinoglow Music</p></div>
+            </div>
+            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_uz_2')">
+                <div class="music-icon"><i class="fas fa-star"></i></div>
+                <div class="music-details"><h4>Hamdam Sobirov — Holimga qara</h4><p>O'zbekcha xit</p></div>
             </div>
         </div>
     </div>
@@ -477,11 +773,11 @@
         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center;">
             <div style="font-size: 50px; color: #9d4edd; margin-bottom: 10px;"><i class="fas fa-user-circle"></i></div>
             <h3 id="user-name">Foydalanuvchi</h3>
-            <p style="color: #ffbc00; font-size: 14px; margin-top: 5px;" id="user-status">Status: Oddiy foydalanuvchi</p>
+            <p style="color: #ffbc00; font-size: 14px; margin-top: 5px;" id="user-status">Status: Kinoglow Foydalanuvchisi</p>
         </div>
     </div>
 
-    <!-- NAVIGATSIYA PANELİ -->
+    <!-- NAVIGATSIYA PANELІ -->
     <div class="navbar">
         <div class="nav-item active" onclick="switchPage('home-page', this)"><i class="fas fa-home"></i><span id="nav-h">Asosiy</span></div>
         <div class="nav-item" onclick="switchPage('saved-page', this)"><i class="fas fa-bookmark"></i><span id="nav-s">Saqlanganlar</span></div>
@@ -490,7 +786,7 @@
         <div class="nav-item" onclick="switchPage('profile-page', this)"><i class="fas fa-user"></i><span id="nav-p">Profilim</span></div>
     </div>
 
-    <script>
+    <script {boundary}>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
@@ -499,35 +795,27 @@
         const langPack = {
             uz: {
                 search: "Kino yoki serial qidirish...",
-                b_title: "Musiqiy hordiq",
-                b_text: "Jonli efir orqali musiqalardan zavqlaning.",
-                t_all: "Hammasi", t_mov: "Kinolar", t_ser: "Seriallar",
-                catalog: "Katalog", type_m: "Kino", type_s: "Serial",
-                saved: "Saqlanganlar", saved_em: "Siz saqlagan kinolar shu yerda ko'rinadi.",
-                vip_t: "VIP TARIFLAR REJASI", vip_sub: "Istalgan tarifni tanlang va barcha pullik kontentlarni oching.",
-                v1: "1 Oylik VIP", v2: "3 Oylik VIP", v3: "6 Oylik VIP", v4: "1 Yillik VIP",
-                v_desc: "Barcha kinolarga to'liq kirish", v_desc2: "Eng ko'p tanlanadigan reja", v_desc3: "Uzoq muddatli qulaylik", v_desc4: "Cheksiz Premium Olam 🔥",
-                btn_s: "Obuna bo'lish", music: "Musiqalar bo'limi", m_sub: "Premium Saundtrek", m_ex: "Eksklyuziv", m_kt: "Kino trek",
-                prof: "Mening Profilim", status: "Status: Oddiy foydalanuvchi", status_vip: "Status: VIP A'zo ✨",
+                catalog: "Katalog",
+                saved: "Saqlanganlar",
+                saved_em: "Siz saqlagan kinolar shu yerda ko'rinadi.",
+                vip_t: "VIP OBUNA REJALARI",
+                music: "Musiqalar Olamidan",
+                prof: "Mening Profilim",
                 nav_h: "Asosiy", nav_s: "Saqlanganlar", nav_m: "Musiqa", nav_p: "Profilim",
-                pop_t: "Premium Kontent", pop_m: "filmini tomosha qilish uchun sizda VIP obuna faol bo'lishi kerak.", pop_b: "VIP sotib olish", pop_c: "Yopish",
-                pay_t: "To'lov tasdiqlash", pay_m: "Stars yozib olinadi. Davom etasizmi?", pay_ok: "Tasdiqlash", pay_can: "Bekor qilish", pay_alert: "Rahmat! VIP status faollashdi!"
+                status: "Status: Kinoglow Foydalanuvchisi",
+                pay_alert: "Kinoglow loyihasini qo'llab quvvatlaganingiz uchun rahmat!"
             },
             ru: {
                 search: "Поиск фильмов или сериалов...",
-                b_title: "Музыкальный отдых",
-                b_text: "Наслаждайтесь музыкой в прямом эфире.",
-                t_all: "Все", t_mov: "Фильмы", t_ser: "Сериалы",
-                catalog: "Каталог", type_m: "Фильм", type_s: "Сериал",
-                saved: "Избранное", saved_em: "Здесь будут отображаться сохраненные вами фильмы.",
-                vip_t: "ТАРИФНЫЙ ПЛАН VIP", vip_sub: "Выберите любой тариф и откройте весь платный контент.",
-                v1: "1 Месяц VIP", v2: "3 Месяца VIP", v3: "6 Месяцев VIP", v4: "1 Год VIP",
-                v_desc: "Полный доступ ко всем фильмам", v_desc2: "Самый популярный план", v_desc3: "Долговременный комфорт", v_desc4: "Безграничный Премиум Мир 🔥",
-                btn_s: "Подписаться", music: "Музыкальный раздел", m_sub: "Премиум Саундтрек", m_ex: "Эксклюзив", m_kt: "Кино трек",
-                prof: "Мой Профиль", status: "Статус: Обычный пользователь", status_vip: "Статус: VIP Клиент ✨",
+                catalog: "Каталог",
+                saved: "Избранное",
+                saved_em: "Здесь будут отображаться сохраненные вами фильмы.",
+                vip_t: "VIP ПОДПИСКИ",
+                music: "Мир Музыки",
+                prof: "Мой Профиль",
                 nav_h: "Главная", nav_s: "Избранное", nav_m: "Музыка", nav_p: "Профиль",
-                pop_t: "Премиум Контент", pop_m: "Для просмотра фильма необходимо активировать VIP подписку.", pop_b: "Купить VIP", pop_c: "Закрыть",
-                pay_t: "Подтверждение оплаты", pay_m: "Stars будет списано. Продолжить?", pay_ok: "Подтвердить", pay_can: "Отмена", pay_alert: "Спасибо! VIP статус успешно активирован!"
+                status: "Статус: Пользователь Kinoglow",
+                pay_alert: "Спасибо за поддержку проекта Kinoglow!"
             }
         };
 
@@ -536,47 +824,17 @@
             const p = langPack[lang];
             
             document.getElementById('search-input').placeholder = p.search;
-            document.getElementById('banner-title').innerText = p.b_title;
-            document.getElementById('banner-text').innerText = p.b_text;
-            document.getElementById('tab-all').innerText = p.t_all;
-            document.getElementById('tab-movies').innerText = p.t_mov;
-            document.getElementById('tab-series').innerText = p.t_ser;
             document.getElementById('catalog-title').innerText = p.catalog;
-            
-            document.querySelectorAll('.type-series').forEach(el => el.innerText = p.type_s);
-            document.querySelectorAll('.type-movie').forEach(el => el.innerText = p.type_m);
-            
             document.getElementById('saved-title').innerText = p.saved;
             document.getElementById('saved-empty').innerText = p.saved_em;
             document.getElementById('vip-main-title').innerText = p.vip_t;
-            document.getElementById('vip-subtitle').innerText = p.vip_sub;
-            
-            document.querySelector('.v-card-1').innerText = p.v1;
-            document.querySelector('.v-card-2').innerText = p.v2;
-            document.querySelector('.v-card-3').innerText = p.v3;
-            document.querySelector('.v-desc-1').innerText = p.v_desc;
-            document.querySelector('.v-desc-2').innerText = p.v_desc2;
-            document.querySelector('.v-desc-3').innerText = p.v_desc3;
-            document.querySelector('.v-desc-4').innerText = p.v_desc4;
-            
-            document.querySelectorAll('.btn-sub').forEach(el => el.innerText = p.btn_s);
             document.getElementById('music-title').innerText = p.music;
-            document.querySelector('.m-sub').innerText = p.m_sub;
-            document.querySelector('.m-ex').innerText = p.m_ex;
-            document.querySelector('.m-kt').innerText = p.m_kt;
-            
             document.getElementById('profile-title').innerText = p.prof;
             document.getElementById('nav-h').innerText = p.nav_h;
             document.getElementById('nav-s').innerText = p.nav_s;
             document.getElementById('nav-m').innerText = p.nav_m;
             document.getElementById('nav-p').innerText = p.nav_p;
-            
-            const currentStatus = document.getElementById('user-status').innerText;
-            if(currentStatus.includes("VIP")) {
-                document.getElementById('user-status').innerText = p.status_vip;
-            } else {
-                document.getElementById('user-status').innerText = p.status;
-            }
+            document.getElementById('user-status').innerText = p.status;
 
             document.getElementById('language-overlay').style.display = 'none';
         }
@@ -593,32 +851,39 @@
             element.classList.add('active');
         }
 
-        function openPremiumMovie(title) {
-            const p = langPack[currentLang];
-            tg.showPopup({
-                title: p.pop_t,
-                message: `"${title}" ${p.pop_m}`,
-                buttons: [{id: 'buy', type: 'default', text: p.pop_b}, {type: 'cancel', text: p.pop_c}]
-            }, function(buttonId) {
-                if (buttonId === 'buy') {
-                    switchPage('vip-page', document.querySelectorAll('.nav-item')[3]);
+        function openKino(url) {
+            tg.openTelegramLink(url);
+        }
+
+        function filterTab(type, element) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            element.classList.add('active');
+
+            const cards = document.querySelectorAll('.movie-card');
+            cards.forEach(card => {
+                if (type === 'all' || card.getAttribute('data-type') === type) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
             });
         }
 
-        function payStars(amount) {
-            const p = langPack[currentLang];
-            tg.showPopup({
-                title: p.pay_t,
-                message: `${amount} ${p.pay_m}`,
-                buttons: [{id: 'pay', type: 'ok', text: p.pay_ok}, {type: 'cancel', text: p.pay_can}]
-            }, function(buttonId) {
-                if (buttonId === 'pay') {
-                    tg.showAlert(p.pay_alert);
-                    document.getElementById('user-status').innerText = p.status_vip;
-                    document.getElementById('user-status').style.color = "#ff007f";
+        function filterContent() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const cards = document.querySelectorAll('.movie-card');
+            cards.forEach(card => {
+                const title = card.getAttribute('data-title');
+                if (title.includes(query)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
                 }
             });
+        }
+
+        function payVIP(amount) {
+            tg.showAlert(langPack[currentLang].pay_alert);
         }
     </script>
 </body>
