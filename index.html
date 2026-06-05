@@ -1,142 +1,345 @@
-import asyncio
-from aiogram import Bot, Dispatcher, types, F
-from aiogram.filters import CommandStart, Command
-from aiogram.fsm.context import FSMContext
-from aiogram.fsm.state import State, StatesGroup
-from motor.motor_asyncio import AsyncIOMotorClient
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kino Glow</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+            -webkit-user-select: none;
+            user-select: none;
+        }
 
-# ⚠️ SOZLAMALAR
-BOT_TOKEN = "7880153835:AAFW_wV9f_E_Yh6OExw_8YmS-fR6xU7XpDk" # O'zingizniki bilan almashtiring
-MONGO_URL = "mongodb+srv://..." # MongoDB manzilingiz
-ADMIN_ID = 123456789  # O'zingizning Telegram ID raqamingiz
+        body {
+            background: #060112;
+            color: #ffffff;
+            overflow-x: hidden;
+            padding-bottom: 90px;
+        }
 
-bot = Bot(token=BOT_TOKEN)
-dp = Dispatcher()
+        /* 🌌 KOINOT FON VA ANIMATSIYALAR */
+        .universe-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, #1a082e 0%, #05010d 100%);
+            z-index: -3;
+        }
 
-# MongoDB
-cluster = AsyncIOMotorClient(MONGO_URL)
-db = cluster["kinoglow_new_db"]
-movies_col = db["movies"]
-music_col = db["music"]
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: url('https://www.transparenttextures.com/patterns/stardust.png');
+            opacity: 0.4;
+            animation: pulseStars 8s infinite alternate;
+        }
 
-# Admin FSM Rejasi
-class AdminStates(StatesGroup):
-    waiting_for_movie_code = State()
-    waiting_for_movie_title = State()
-    waiting_for_movie_file = State()
-    waiting_for_music_code = State()
-    waiting_for_music_title = State()
-    waiting_for_music_file = State()
+        @keyframes pulseStars {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
 
-# 🚀 /start BUYRUG'I
-@dp.message(CommandStart())
-async def start_handler(message: types.Message):
-    webapp_url = "https://your-vercel-app.vercel.app" # GitHub/Vercel havolangiz
-    
-    kb = [[types.InlineKeyboardButton(text="Kino Glow ilovasini ochish 🚀", web_app=types.WebAppInfo(url=webapp_url))]]
-    reply_markup = types.InlineKeyboardMarkup(inline_keyboard=kb)
-    
-    await message.answer(
-        "✨ **Kino Glow botiga xush kelibsiz!** ✨\n\n"
-        "Kino kodini to'g'ridan-to'g'ri yozing yoki pastdagi Mini App orqali foydalaning!",
-        reply_markup=reply_markup, parse_mode="Markdown"
-    )
+        /* 🌙 OY TIZIMI */
+        .moon {
+            position: fixed;
+            top: 15%;
+            right: 10%;
+            width: 60px;
+            height: 60px;
+            background: url('https://i.imgur.com/G96V7f9.png') no-repeat center/cover, #e1e5f2;
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(225, 229, 242, 0.4);
+            z-index: -1;
+        }
 
-# 👑 ADMIN PANEL MENYUSI
-@dp.message(Command("admin"), F.from_user.id == ADMIN_ID)
-async def admin_menu(message: types.Message):
-    kb = [
-        [types.KeyboardButton(text="➕ Kino qo'shish"), types.KeyboardButton(text="➕ Musiqa qo'shish")]
-    ]
-    keyboard = types.ReplyKeyboardMarkup(keyboard=kb, resize_keyboard=True)
-    await message.answer("🛠️ **Kino Glow Admin Paneliga xush kelibsiz!**", reply_markup=keyboard, parse_mode="Markdown")
+        /* 🛰️ SPUTNIK ANIMATSIYASI */
+        .sputnik {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            color: #00f0ff;
+            font-size: 20px;
+            z-index: -1;
+            animation: orbit 20s linear infinite;
+        }
 
-# 🎬 KINO QO'SHISH JARAYONI
-@dp.message(F.text == "➕ Kino qo'shish", F.from_user.id == ADMIN_ID)
-async def add_movie_start(message: types.Message, state: FSMContext):
-    await message.answer("🔑 Yangi kinoning kodini yozing (Masalan: 110):")
-    await state.set_state(AdminStates.waiting_for_movie_code)
+        @keyframes orbit {
+            0% { transform: translate(-50px, 100vh) rotate(0deg); }
+            50% { transform: translate(calc(100vw + 50px), 20vh) rotate(180deg); }
+            100% { transform: translate(-50px, -10vh) rotate(360deg); }
+        }
 
-@dp.message(AdminStates.waiting_for_movie_code, F.from_user.id == ADMIN_ID)
-async def add_movie_code(message: types.Message, state: FSMContext):
-    await state.update_data(kino_id=message.text.strip())
-    await message.answer("🎬 Kino nomini yozing:")
-    await state.set_state(AdminStates.waiting_for_movie_title)
+        /* ✨ NEON LOGO (ANIMATSIYALI) */
+        .header {
+            text-align: center;
+            padding: 25px 15px 15px;
+        }
 
-@dp.message(AdminStates.waiting_for_movie_title, F.from_user.id == ADMIN_ID)
-async def add_movie_title(message: types.Message, state: FSMContext):
-    await state.update_data(title=message.text.strip())
-    await message.answer("📹 Endi kinoning video faylini (yoki boshqa kanaldan forward qilib) botga yuboring:")
-    await state.set_state(AdminStates.waiting_for_movie_file)
+        .bot-logo {
+            font-size: 32px;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: 0 0 10px #9d4edd, 0 0 20px #9d4edd;
+            animation: neonGlow 2s ease-in-out infinite alternate;
+        }
 
-@dp.message(AdminStates.waiting_for_movie_file, F.video, F.from_user.id == ADMIN_ID)
-async def add_movie_file(message: types.Message, state: FSMContext):
-    data = await state.get_data()
-    file_id = message.video.file_id
-    
-    # MongoDB bazasiga saqlash
-    await movies_col.insert_one({
-        "kino_id": data["kino_id"],
-        "title": data["title"],
-        "file_id": file_id
-    })
-    
-    await message.answer(f"✅ Kino muvaffaqiyatli saqlandi!\n🔑 Kod: {data['kino_id']}\n🎬 Nomi: {data['title']}")
-    await state.clear()
+        .bot-logo span {
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f;
+        }
 
-# 🎵 MUSIQA QO'SHISH JARAYONI
-@dp.message(F.text == "➕ Musiqa qo'shish", F.from_user.id == ADMIN_ID)
-async def add_music_start(message: types.Message, state: FSMContext):
-    await message.answer("🔑 Musiqa kodini yozing (Masalan: m01):")
-    await state.set_state(AdminStates.waiting_for_music_code)
+        @keyframes neonGlow {
+            0% { text-shadow: 0 0 10px #9d4edd, 0 0 20px #9d4edd; }
+            100% { text-shadow: 0 0 15px #ff007f, 0 0 30px #ff007f; transform: scale(1.02); }
+        }
 
-@dp.message(AdminStates.waiting_for_music_code, F.from_user.id == ADMIN_ID)
-async def add_music_code(message: types.Message, state: FSMContext):
-    await state.update_data(music_id=message.text.strip())
-    await message.answer("🎵 Musiqa (yoki ijrochi) nomini yozing:")
-    await state.set_state(AdminStates.waiting_for_music_title)
+        /* 🟣 FIOLETOVIY NEON INTERFEYS */
+        .search-container {
+            padding: 0 20px;
+            margin-bottom: 20px;
+        }
 
-@dp.message(AdminStates.waiting_for_music_title, F.from_user.id == ADMIN_ID)
-async def add_music_title(message: types.Message, state: FSMContext):
-    await state.update_data(title=message.text.strip())
-    await message.answer("🎧 Endi audio faylni (yoki mp3) botga yuboring:")
-    await state.set_state(AdminStates.waiting_for_music_file)
+        .search-bar {
+            width: 100%;
+            padding: 14px 20px;
+            background: rgba(26, 8, 46, 0.6);
+            border: 2px solid #9d4edd;
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.3);
+            border-radius: 30px;
+            color: white;
+            outline: none;
+            font-size: 15px;
+        }
 
-@dp.message(AdminStates.waiting_for_music_file, F.audio, F.from_user.id == ADMIN_ID)
-async def add_music_file(message: types.Message, state: FSMContext):
-    data = await state.get_data()
-    file_id = message.audio.file_id
-    
-    await music_col.insert_one({
-        "music_id": data["music_id"],
-        "title": data["title"],
-        "file_id": file_id
-    })
-    
-    await message.answer(f"✅ Musiqa bazaga qo'shildi!\n🔑 Kod: {data['music_id']}\n🎵 Nomi: {data['title']}")
-    await state.clear()
+        .search-bar:focus {
+            border-color: #ff007f;
+            box-shadow: 0 0 15px rgba(255, 0, 127, 0.5);
+        }
 
-# 🔍 FOYDANALUVCHI QIDIRGANDA JAVOB BERISH
-@dp.message(F.text)
-async def global_search(message: types.Message):
-    code = message.text.strip()
-    
-    # Oldin kinodan qidiradi
-    movie = await movies_col.find_one({"kino_id": code})
-    if movie:
-        await message.reply_video(video=movie["file_id"], caption=f"🎬 **Kino:** {movie['title']}\n🔑 **Kod:** #{movie['kino_id']}", parse_mode="Markdown")
-        return
+        .page-content {
+            display: none;
+            padding: 0 20px;
+        }
 
-    # Keyin musiqadan qidiradi
-    music = await music_col.find_one({"music_id": code})
-    if music:
-        await message.reply_audio(audio=music["file_id"], caption=f"🎵 **Musiqa:** {music['title']}\n🔑 **Kod:** #{music['music_id']}", parse_mode="Markdown")
-        return
-        
-    await message.reply("❌ Bunday kod bilan kino yoki musiqa topilmadi.")
+        .page-content.active {
+            display: block;
+        }
 
-async def main():
-    await dp.start_polling(bot)
+        .grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
 
-if __name__ == "__main__":
-    asyncio.run(main())
+        /* CARD STYLES */
+        .neon-card {
+            background: rgba(20, 6, 38, 0.7);
+            border: 1px solid rgba(157, 78, 221, 0.4);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card-img-box {
+            height: 130px;
+            background: #120424;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #9d4edd;
+            position: relative;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: #ff007f;
+            padding: 3px 7px;
+            border-radius: 5px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+        .card-body {
+            padding: 10px;
+        }
+
+        .card-title {
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            height: 38px;
+            overflow: hidden;
+        }
+
+        .card-btn {
+            width: 100%;
+            padding: 10px;
+            background: linear-gradient(45deg, #9d4edd, #ff007f);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.3);
+        }
+
+        /* VIP CARD */
+        .vip-box {
+            background: linear-gradient(135deg, rgba(30, 3, 66, 0.9), rgba(255, 0, 127, 0.2));
+            border: 2px solid #ff007f;
+            box-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .vip-price {
+            font-size: 28px;
+            color: #00f0ff;
+            font-weight: 900;
+            margin: 15px 0;
+            text-shadow: 0 0 10px #00f0ff;
+        }
+
+        /* NAVBAR TIZIMI */
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 70px;
+            background: rgba(10, 2, 21, 0.95);
+            border-top: 2px solid #9d4edd;
+            box-shadow: 0 -5px 20px rgba(157, 78, 221, 0.3);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8a8194;
+            font-size: 11px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            margin-bottom: 5px;
+        }
+
+        .nav-item.active {
+            color: #ff007f;
+            text-shadow: 0 0 10px #ff007f;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="universe-bg"></div>
+    <div class="stars"></div>
+    <div class="moon"></div>
+    <i class="fas fa-satellite sputnik"></i>
+
+    <div class="header">
+        <div class="bot-logo">Kino Glow<span>.uz</span></div>
+    </div>
+
+    <!-- 🔍 QIDIRUV -->
+    <div class="search-container" id="search-section">
+        <input type="text" id="search-input" class="search-bar" placeholder="Kino kodini kiriting...">
+    </div>
+
+    <!-- 🎬 KINO & SERIAL BO'LIMI -->
+    <div id="movie-page" class="page-content active">
+        <div class="grid-layout" id="movies-container">
+            <!-- Kinolar avtomat bazadan bu yerga keladi -->
+        </div>
+    </div>
+
+    <!-- 🎵 MUSIQA BO'LIMI -->
+    <div id="music-page" class="page-content">
+        <div class="grid-layout" id="music-container">
+            <!-- Musiqalar shu yerga keladi -->
+        </div>
+    </div>
+
+    <!-- ⭐️ VIP OBUNA BO'LIMI (ESKILIGICHA) -->
+    <div id="vip-page" class="page-content">
+        <div class="vip-box">
+            <h2 style="color: #ffbc00; text-shadow: 0 0 10px #ffbc00;">⭐️ OYLIK VIP OBUNA</h2>
+            <p style="margin-top: 10px; color: #ccc;">Barcha premyera kinolar va cheksiz yuklab olish imkoniyati!</p>
+            <div class="vip-price">100 Telegram Stars</div>
+            <button class="card-btn" style="border-radius: 25px; padding: 12px;" onclick="payVIP()">Hozir Obuna Bo'lish</button>
+        </div>
+    </div>
+
+    <!-- 👤 PROFIL BO'LIMI -->
+    <div id="profile-page" class="page-content">
+        <div class="vip-box" style="border-color: #9d4edd; box-shadow: 0 0 15px rgba(157,78,221,0.4);">
+            <i class="fas fa-user-astronaut" style="font-size: 60px; color: #9d4edd; margin-bottom: 15px;"></i>
+            <h2 id="username">Kosmonavt</h2>
+            <p style="color: #00f0ff; margin-top: 5px;">Status: Premium Foydalanuvchi</p>
+        </div>
+    </div>
+
+    <!-- 📱 NAVBAR -->
+    <div class="navbar">
+        <div class="nav-item active" onclick="switchPage('movie-page', this)"><i class="fas fa-film"></i><span>Kinolar</span></div>
+        <div class="nav-item" onclick="switchPage('music-page', this)"><i class="fas fa-music"></i><span>Musiqa</span></div>
+        <div class="nav-item" onclick="switchPage('vip-page', this)"><i class="fas fa-star"></i><span>VIP</span></div>
+        <div class="nav-item" onclick="switchPage('profile-page', this)"><i class="fas fa-user"></i><span>Profil</span></div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
+        }
+
+        function switchPage(pageId, el) {
+            document.querySelectorAll('.page-content').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            el.classList.add('active');
+            
+            // Qidiruv panelini faqat kino va musiqa bo'limida ko'rsatish
+            document.getElementById('search-section').style.display = (pageId === 'movie-page' || pageId === 'music-page') ? 'block' : 'none';
+        }
+
+        function payVIP() {
+            tg.showAlert("Eski obuna tizimi bo'yicha: Kodni to'g'ridan-to'g'ri bot ichiga yozib tomosha qiling!");
+        }
+    </script>
+</body>
+</html>
