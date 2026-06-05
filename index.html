@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kinoglow | Bepul Kinolar va Musiqalar Olamiga Xush Kelibsiz!</title>
+    <title>Kinoglow | Rasmiy Mini App</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -23,7 +23,6 @@
             padding-bottom: 90px;
         }
 
-        /* Kosmik fon */
         .universe-bg {
             position: fixed;
             top: 0;
@@ -42,10 +41,9 @@
             height: 100%;
             z-index: -1;
             background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.4;
+            opacity: 0.3;
         }
 
-        /* Til Tanlash Oynasi */
         #language-overlay {
             position: fixed;
             top: 0;
@@ -79,7 +77,6 @@
             border-color: #ff007f;
         }
 
-        /* Header va Logo */
         .header {
             text-align: center;
             padding: 20px 15px 10px;
@@ -98,7 +95,6 @@
             color: #ff007f;
         }
 
-        /* Qidiruv */
         .search-container {
             padding: 0 15px;
             margin-bottom: 15px;
@@ -114,13 +110,14 @@
             outline: none;
         }
 
-        /* LIVE YouTube Player Banner */
+        /* LIVE YouTube Player Banner (So'ralgan uslubda) */
         .live-banner {
             margin: 0 15px 20px;
             padding: 12px;
-            background: rgba(15, 7, 32, 0.7);
+            background: rgba(15, 7, 32, 0.8);
             border: 1px solid rgba(255, 0, 127, 0.4);
             border-radius: 15px;
+            position: relative;
         }
 
         .live-header {
@@ -155,6 +152,38 @@
             width: 100%;
             height: 100%;
             border: 0;
+            display: none; /* Dastlab yashiriq bo'ladi */
+        }
+
+        .music-placeholder-btn {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #240046, #3c096c);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            color: #fff;
+            font-weight: bold;
+            gap: 10px;
+            font-size: 14px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .music-placeholder-btn i {
+            font-size: 32px;
+            color: #ff007f;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
         }
 
         @keyframes pulse {
@@ -163,7 +192,6 @@
             100% { opacity: 0.6; }
         }
 
-        /* Filtr tablari */
         .filter-tabs {
             display: flex;
             gap: 10px;
@@ -187,7 +215,6 @@
             border-color: #ff007f;
         }
 
-        /* Bo'limlar */
         .page-content {
             display: none;
             padding: 0 15px;
@@ -197,13 +224,13 @@
             display: block;
         }
 
-        /* Kino Kartochkalari */
         .section-title {
             font-size: 18px;
             margin-bottom: 15px;
             font-weight: 600;
         }
 
+        /* Kino Grid va Kartochkalar */
         .movies-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -215,14 +242,15 @@
             border: 1px solid rgba(157, 78, 221, 0.15);
             border-radius: 12px;
             overflow: hidden;
-            position: relative;
-            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .movie-img-container {
             position: relative;
             width: 100%;
-            height: 160px;
+            height: 140px;
             background: #14092b;
             display: flex;
             align-items: center;
@@ -265,15 +293,22 @@
 
         .movie-info {
             padding: 8px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .movie-title {
             font-size: 13px;
             font-weight: 600;
-            white-space: nowrap;
+            color: #fff;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
             overflow: hidden;
-            text-overflow: ellipsis;
-            margin-bottom: 4px;
+            height: 36px;
         }
 
         .movie-meta {
@@ -281,46 +316,103 @@
             justify-content: space-between;
             font-size: 11px;
             color: #aaa;
+            margin-bottom: 8px;
         }
 
-        /* Musiqalar uslubi */
+        /* Botga Yo'naltiruvchi maxsus ko'k tugma */
+        .go-bot-btn {
+            width: 100%;
+            padding: 8px;
+            background: linear-gradient(45deg, #0077b6, #00b4d8);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: 0.2s;
+        }
+
+        .go-bot-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Musiqalar bo'limi - Spotify & Yandex style */
         .music-category {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .category-subtitle {
             font-size: 14px;
             color: #ff007f;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             border-left: 3px solid #ff007f;
             padding-left: 8px;
+            font-weight: bold;
         }
 
         .music-item {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             background: rgba(255,255,255,0.04);
-            padding: 10px 12px;
+            padding: 12px;
             border-radius: 10px;
             margin-bottom: 8px;
-            cursor: pointer;
             border: 1px solid rgba(157, 78, 221, 0.1);
         }
 
+        .music-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .music-rank {
+            font-size: 14px;
+            font-weight: bold;
+            color: #ffbc00;
+            width: 20px;
+        }
+
         .music-icon {
-            font-size: 20px;
+            font-size: 18px;
             color: #9d4edd;
-            margin-right: 12px;
         }
 
         .music-details h4 {
             font-size: 13px;
             font-weight: 600;
+            color: #fff;
         }
 
         .music-details p {
             font-size: 11px;
             color: #aaa;
+        }
+
+        .music-stats {
+            font-size: 11px;
+            color: #00ff66;
+            background: rgba(0, 255, 102, 0.1);
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .listen-btn {
+            background: #9d4edd;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
         }
 
         /* VIP Tarmoq */
@@ -351,7 +443,7 @@
             cursor: pointer;
         }
 
-        /* Pastki Menyu */
+        /* Navbar */
         .navbar {
             position: fixed;
             bottom: 0;
@@ -393,31 +485,32 @@
     <div class="universe-bg"></div>
     <div class="stars"></div>
 
-    <!-- TIL TANLASH OYNASI -->
     <div id="language-overlay">
         <div class="bot-logo">Kinoglow<span>.uz</span></div>
         <button class="lang-btn" onclick="setLanguage('uz')">🇺🇿 O'zbekcha</button>
         <button class="lang-btn" onclick="setLanguage('ru')">🇷🇺 Русский</button>
     </div>
 
-    <!-- ASOSIY SAHIFA -->
     <div id="home-page" class="page-content active">
         <div class="header">
             <div class="bot-logo">Kinoglow<span>.uz</span></div>
         </div>
 
         <div class="search-container">
-            <input type="text" id="search-input" class="search-bar" placeholder="Kino yoki serial qidirish..." oninput="filterContent()">
+            <input type="text" id="search-input" class="search-bar" placeholder="Kino kodini yoki nomini yozing..." oninput="filterContent()">
         </div>
 
-        <!-- LIVE YOUTUBE MUSIQA BANNER -->
         <div class="live-banner">
             <div class="live-header">
                 <span style="font-size:13px; font-weight:bold;" id="banner-title"><i class="fas fa-headset"></i> Musiqiy hordiq</span>
                 <span class="live-badge">LIVE</span>
             </div>
-            <div class="video-wrapper">
-                <iframe src="https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=1&loop=1&playlist=jfKfPfyJRdk" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+            <div class="video-wrapper" id="video-box">
+                <div class="music-placeholder-btn" onclick="startLiveMusic()">
+                    <i class="fas fa-play-circle"></i>
+                    <span>Musiqani eshitish uchun bosing 🎧<br><small>(Jonli ijro, kelgan joyidan boshlanadi)</small></span>
+                </div>
+                <iframe id="live-iframe" src="" allow="autoplay; encrypted-media" allowfullscreen></iframe>
             </div>
         </div>
 
@@ -429,355 +522,353 @@
 
         <h2 class="section-title" id="catalog-title">Katalog</h2>
         
-        <!-- FILMLAR SETKASI -->
         <div class="movies-grid" id="movies-container">
             
-            <!-- 1. O'rgimchak Nuar -->
-            <div class="movie-card" data-type="serial" data-title="o'rgimchak nuar spider noir" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_454')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎬 Serial</span>
+            <div class="movie-card" data-type="serial" data-title="#454 o'rgimchak nuar spider noir">
                 <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎬 Serial</span>
                     <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?w=400" class="movie-img" alt="Spider Noir">
                 </div>
                 <div class="movie-info">
                     <div class="movie-title">O'rgimchak Nuar</div>
-                    <div class="movie-meta"><span>#454</span> <span>👁️ 1.2k</span></div>
+                    <div class="movie-meta"><span>#454</span> <span class="view-count" data-base="1240">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_454')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 2. Substansiya -->
-            <div class="movie-card" data-type="kino" data-title="substansiya the substance 2024" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_453')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
+            <div class="movie-card" data-type="kino" data-title="#453 substansiya the substance 2024">
                 <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
                     <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=400" class="movie-img" alt="The Substance">
                 </div>
                 <div class="movie-info">
                     <div class="movie-title">Substansiya (2024)</div>
-                    <div class="movie-meta"><span>#453</span> <span>👁️ 762</span></div>
+                    <div class="movie-meta"><span>#453</span> <span class="view-count" data-base="762">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_453')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 3. FARZ -->
-            <div class="movie-card" data-type="kino" data-title="farz o'zbek film premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_452')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#452 farz o'zbek film premyera">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">FARZ | O'ZBEK FILM</div>
-                    <div class="movie-meta"><span>#452</span> <span>👁️ 2.6k</span></div>
+                    <div class="movie-meta"><span>#452</span> <span class="view-count" data-base="2681">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_452')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 4. Ko'zingni ochma -->
-            <div class="movie-card" data-type="kino" data-title="ko'zingni ochma o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_451')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
+            <div class="movie-card" data-type="kino" data-title="#451 ko'zingni ochma o'zbek tilida">
                 <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
                     <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400" class="movie-img">
                 </div>
                 <div class="movie-info">
                     <div class="movie-title">Ko'zingni ochma</div>
-                    <div class="movie-meta"><span>#451</span> <span>👁️ 710</span></div>
+                    <div class="movie-meta"><span>#451</span> <span class="view-count" data-base="710">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_451')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 5. Topdim seni 3 -->
-            <div class="movie-card" data-type="kino" data-title="topdim seni 3 qozoqfilm" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_450')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#450 topdim seni 3 qozoqfilm">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Topdim seni 3 | Qozoq</div>
-                    <div class="movie-meta"><span>#450</span> <span>👁️ 546</span></div>
+                    <div class="movie-meta"><span>#450</span> <span class="view-count" data-base="546">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_450')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 6. Apex / Cho'qqi -->
-            <div class="movie-card" data-type="kino" data-title="apex cho'qqi 2026 o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_449')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#449 apex cho'qqi 2026 o'zbek tilida">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Apex / Cho'qqi (2026)</div>
-                    <div class="movie-meta"><span>#449</span> <span>👁️ 463</span></div>
+                    <div class="movie-meta"><span>#449</span> <span class="view-count" data-base="463">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_449')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 7. ULAR SENI O'LDIRADI -->
-            <div class="movie-card" data-type="kino" data-title="ular seni o'ldiradi 2026" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_447')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#447 ular seni o'ldiradi 2026">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Ular Seni O'ldiradi</div>
-                    <div class="movie-meta"><span>#447</span> <span>👁️ 633</span></div>
+                    <div class="movie-meta"><span>#447</span> <span class="view-count" data-base="633">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_447')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 8. YOVUZ BILAN JANG -->
-            <div class="movie-card" data-type="kino" data-title="yovuz bilan jang 2026 premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_446')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#446 yovuz bilan jang 2026 premyera">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
-                    <div class="movie-title">Yovuz Bilan Jang</div>
-                    <div class="movie-meta"><span>#446</span> <span>👁️ 358</span></div>
+                    <div class="movie-title">Yovuz Bilan Jang (Premyera)</div>
+                    <div class="movie-meta"><span>#446</span> <span class="view-count" data-base="358">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_446')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 9. IFRIT - 2 -->
-            <div class="movie-card" data-type="kino" data-title="ifrit 2 o'zbek tilida premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_445')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#445 ifrit 2 o'zbek tilida premyera">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Ifrit - 2 | Premyera</div>
-                    <div class="movie-meta"><span>#445</span> <span>👁️ 1.1k</span></div>
+                    <div class="movie-meta"><span>#445</span> <span class="view-count" data-base="1183">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_445')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 10. Nomi: Ifrit kuchli iblis -->
-            <div class="movie-card" data-type="kino" data-title="nomi ifrit kuchli iblis uzbek o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_444')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#444 nomi ifrit kuchli iblis uzbek o'zbek tilida">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Ifrit kuchli iblis</div>
-                    <div class="movie-meta"><span>#444</span> <span>👁️ 1.5k</span></div>
+                    <div class="movie-meta"><span>#444</span> <span class="view-count" data-base="1556">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_444')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 11. Sevgilim sensan -->
-            <div class="movie-card" data-type="serial" data-title="sevgilim sensan yangi turk serial" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_443')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎬 Serial</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="serial" data-title="#443 sevgilim sensan yangi turk serial">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎬 Serial</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Sevgilim sensan | Turk</div>
-                    <div class="movie-meta"><span>#443</span> <span>👁️ Yangi</span></div>
+                    <div class="movie-meta"><span>#443</span> <span class="view-count" data-base="198">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_443')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 12. SWAPPED | O'RIN ALMASHGANLAR -->
-            <div class="movie-card" data-type="kino" data-title="swapped o'rin almashganlar" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_442')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#442 swapped o'rin almashganlar vip">
+                <div class="movie-img-container">
+                    <span class="badge-free" style="background:linear-gradient(45deg, #ffbc00, #ff007f);">VIP</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
-                    <div class="movie-title">O'rin Almashganlar</div>
-                    <div class="movie-meta"><span>#442</span> <span>👁️ 106</span></div>
+                    <div class="movie-title">O'rin Almashganlar (VIP)</div>
+                    <div class="movie-meta"><span>#442</span> <span class="view-count" data-base="106">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_442')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 13. SO'NGGI SAFAR -->
-            <div class="movie-card" data-type="serial" data-title="so'nggi safar serial" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_441')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎬 Serial</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="serial" data-title="#441 so'nggi safar serial">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎬 Serial</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">So'nggi Safar</div>
-                    <div class="movie-meta"><span>#441</span> <span>👁️ 0</span></div>
+                    <div class="movie-meta"><span>#441</span> <span class="view-count" data-base="245">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_441')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 14. Atirchi -->
-            <div class="movie-card" data-type="kino" data-title="atirchi bir qotilning hikoyasi perfume" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_439')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#439 atirchi bir qotilning hikoyasi perfume">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Atirchi: Qotil Hikoyasi</div>
-                    <div class="movie-meta"><span>#439</span> <span>👁️ 1.4k</span></div>
+                    <div class="movie-meta"><span>#439</span> <span class="view-count" data-base="1435">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_439')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 15. Mortal Kombat 2 -->
-            <div class="movie-card" data-type="kino" data-title="mortal kombat 2 o'zbek tilida premyera" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_438')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#438 mortal kombat 2 o'zbek tilida premyera">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Mortal Kombat 2</div>
-                    <div class="movie-meta"><span>#438</span> <span>👁️ 871</span></div>
+                    <div class="movie-meta"><span>#438</span> <span class="view-count" data-base="871">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_438')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 16. Sheriklar 3 -->
-            <div class="movie-card" data-type="kino" data-title="sheriklar 3 o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_437')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#437 sheriklar 3 o'zbek tilida">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Sheriklar 3</div>
-                    <div class="movie-meta"><span>#437</span> <span>👁️ 899</span></div>
+                    <div class="movie-meta"><span>#437</span> <span class="view-count" data-base="899">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_437')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 17. Jannat onalar oyog'i ostida 2 -->
-            <div class="movie-card" data-type="kino" data-title="jannat onalar oyog'i ostida 2" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_436')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#436 jannat onalar oyog'i ostida 2">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Jannat onalar ostida 2</div>
-                    <div class="movie-meta"><span>#436</span> <span>👁️ 1.8k</span></div>
+                    <div class="movie-meta"><span>#436</span> <span class="view-count" data-base="1821">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_436')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 18. QORA SIGAN -->
-            <div class="movie-card" data-type="serial" data-title="qora sigan o'zbek serial" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_435')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎬 Serial</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="serial" data-title="#435 qora sigan o'zbek serial">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎬 Serial</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Qora Sigan | Serial</div>
-                    <div class="movie-meta"><span>#435</span> <span>👁️ 0</span></div>
+                    <div class="movie-meta"><span>#435</span> <span class="view-count" data-base="412">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_435')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 19. TIMUR (2025) -->
-            <div class="movie-card" data-type="kino" data-title="timur 2025 premyera netflix" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_432')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#432 timur 2025 premyera netflix">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">TIMUR (2025) Netflix</div>
-                    <div class="movie-meta"><span>#432</span> <span>👁️ 1k</span></div>
+                    <div class="movie-meta"><span>#432</span> <span class="view-count" data-base="1083">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_432')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
-            <!-- 20. Apokalipsis 2006 -->
-            <div class="movie-card" data-type="kino" data-title="апокалипсис apokalipsis 2006" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_431')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
+            <div class="movie-card" data-type="kino" data-title="#431 апокалипсис apokalipsis 2006">
+                <div class="movie-img-container">
+                    <span class="badge-free">FREE</span>
+                    <span class="badge-type">🎥 Kino</span>
+                    <i class="fas fa-film no-img-placeholder"></i>
+                </div>
                 <div class="movie-info">
                     <div class="movie-title">Apokalipsis 2006</div>
-                    <div class="movie-meta"><span>#431</span> <span>👁️ 496</span></div>
-                </div>
-            </div>
-
-            <!-- 21. G'assol 3-Fasl -->
-            <div class="movie-card" data-type="serial" data-title="g'assol 3-fasl o'zbek tilida" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_430')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎬 Serial</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
-                <div class="movie-info">
-                    <div class="movie-title">G'assol 3-Fasl</div>
-                    <div class="movie-meta"><span>#430</span> <span>👁️ 0</span></div>
-                </div>
-            </div>
-
-            <!-- 22. Senga oshiqman -->
-            <div class="movie-card" data-type="kino" data-title="senga oshiqman" onclick="openKino('https://t.me/Kinoglow_bot?start=kino_429')">
-                <span class="badge-free">FREE</span>
-                <span class="badge-type">🎥 Kino</span>
-                <div class="movie-img-container"><i class="fas fa-film no-img-placeholder"></i></div>
-                <div class="movie-info">
-                    <div class="movie-title">Senga Oshiqman</div>
-                    <div class="movie-meta"><span>#429</span> <span>👁️ 1.6k</span></div>
+                    <div class="movie-meta"><span>#431</span> <span class="view-count" data-base="496">👁️ Yuklanmoqda...</span></div>
+                    <button class="go-bot-btn" onclick="openKino('https://t.me/kinoglow_bot?start=kino_431')"><i class="fas fa-play"></i> Kinoni Ko'rish 🎬</button>
                 </div>
             </div>
 
         </div>
     </div>
 
-    <!-- SAQLANGANLAR SAHIFASI -->
     <div id="saved-page" class="page-content">
         <h2 class="section-title" id="saved-title" style="padding-top:20px;">Saqlanganlar</h2>
         <p id="saved-empty" style="color: #aaa; text-align: center; margin-top: 40px;">Siz saqlagan kinolar shu yerda ko'rinadi.</p>
     </div>
 
-    <!-- VIP SAHIFASI -->
     <div id="vip-page" class="page-content">
         <h2 class="section-title" id="vip-main-title" style="padding-top:20px; text-align:center; color:#ffbc00;">VIP OBUNA REJALARI</h2>
         <p id="vip-subtitle" style="text-align:center; font-size:13px; color:#ccc; margin-bottom:20px;">VIP status orqali Kinoglow loyihasini qo'llab-quvvatlang.</p>
-        
         <div class="vip-card">
-            <h3 class="v-card-1">1 Oylik VIP</h3>
+            <h3>1 Oylik VIP</h3>
             <div class="vip-price">100 ⭐️ Stars</div>
-            <button class="vip-btn btn-sub" onclick="payVIP(100)">Obuna bo'lish</button>
-        </div>
-        <div class="vip-card">
-            <h3 class="v-card-2">Yillik VIP VIP</h3>
-            <div class="vip-price">500 ⭐️ Stars</div>
-            <button class="vip-btn btn-sub" onclick="payVIP(500)">Obuna bo'lish</button>
+            <button class="vip-btn" onclick="payVIP(100)">Obuna bo'lish</button>
         </div>
     </div>
 
-    <!-- MUSIQALAR SAHIFASI -->
     <div id="music-page" class="page-content">
-        <h2 class="section-title" id="music-title" style="padding-top:20px;">Musiqalar Olamidan</h2>
+        <h2 class="section-title" id="music-title" style="padding-top:20px;">🎵 Musiqalar Olamidan (Mutlaqo Bepul)</h2>
         
-        <!-- UFO -->
         <div class="music-category">
-            <div class="category-subtitle">🛸 UFO (Barcha qo'shiqlari)</div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_ufo_1')">
-                <div class="music-icon"><i class="fas fa-music"></i></div>
-                <div class="music-details"><h4>UFO — All Night Long</h4><p>Kinoglow Music</p></div>
+            <div class="category-subtitle">🔥 TOP 10 ENGI KO'P ESHITILGAN REYTING</div>
+            
+            <div class="music-item">
+                <div class="music-left">
+                    <div class="music-rank">1</div>
+                    <div class="music-icon"><i class="fas fa-fire"></i></div>
+                    <div class="music-details"><h4>Billie Eilish — Chihiro</h4><p>Spotify Hit</p></div>
+                </div>
+                <div class="music-stats"><i class="fas fa-headphones"></i> 942k</div>
+                <button class="listen-btn" onclick="openKino('https://t.me/kinoglow_bot?start=music_billie_1')">Eshitish</button>
             </div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_ufo_2')">
-                <div class="music-icon"><i class="fas fa-music"></i></div>
-                <div class="music-details"><h4>UFO — Restart My Heart</h4><p>Kinoglow Music</p></div>
-            </div>
-        </div>
 
-        <!-- MIYAGI -->
-        <div class="music-category">
-            <div class="category-subtitle">🎧 MIYAGI (Barcha mashhur qo'shiqlari)</div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_miyagi_1')">
-                <div class="music-icon"><i class="fas fa-play-circle"></i></div>
-                <div class="music-details"><h4>Miyagi & Эндшпиль — I Got Love</h4><p>Top Hit</p></div>
+            <div class="music-item">
+                <div class="music-left">
+                    <div class="music-rank">2</div>
+                    <div class="music-icon"><i class="fas fa-play-circle"></i></div>
+                    <div class="music-details"><h4>Miyagi & Эндшпиль — I Got Love</h4><p>Yandex Music</p></div>
+                </div>
+                <div class="music-stats"><i class="fas fa-headphones"></i> 891k</div>
+                <button class="listen-btn" onclick="openKino('https://t.me/kinoglow_bot?start=music_miyagi_1')">Eshitish</button>
             </div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_miyagi_2')">
-                <div class="music-icon"><i class="fas fa-play-circle"></i></div>
-                <div class="music-details"><h4>Miyagi — Minor</h4><p>Kinoglow Hit</p></div>
-            </div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_miyagi_3')">
-                <div class="music-icon"><i class="fas fa-play-circle"></i></div>
-                <div class="music-details"><h4>Miyagi & Эндшпиль — Silhouette</h4><p>Yuklab olish</p></div>
-            </div>
-        </div>
 
-        <!-- JANAGA -->
-        <div class="music-category">
-            <div class="category-subtitle">🔥 JANAGA (Barcha qo'shiqlari)</div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_janaga_1')">
-                <div class="music-icon"><i class="fas fa-heart-broken"></i></div>
-                <div class="music-details"><h4>Janaga — По полам</h4><p>Lirik xit</p></div>
+            <div class="music-item">
+                <div class="music-left">
+                    <div class="music-rank">3</div>
+                    <div class="music-icon"><i class="fas fa-star"></i></div>
+                    <div class="music-details"><h4>Navai — Эгоист</h4><p>Top Pop</p></div>
+                </div>
+                <div class="music-stats"><i class="fas fa-headphones"></i> 754k</div>
+                <button class="listen-btn" onclick="openKino('https://t.me/kinoglow_bot?start=music_navai_1')">Eshitish</button>
             </div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_janaga_2')">
-                <div class="music-icon"><i class="fas fa-heart-broken"></i></div>
-                <div class="music-details"><h4>Janaga — Скажи мне</h4><p>Premyera</p></div>
-            </div>
-        </div>
 
-        <!-- O'ZBEKCHA ZAMONAVIY -->
-        <div class="music-category">
-            <div class="category-subtitle">🇺🇿 O'zbekcha Zamonaviy Qo'shiqlar</div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_uz_1')">
-                <div class="music-icon"><i class="fas fa-star"></i></div>
-                <div class="music-details"><h4>Konsta — Havo</h4><p>Kinoglow Music</p></div>
+            <div class="music-item">
+                <div class="music-left">
+                    <div class="music-rank">4</div>
+                    <div class="music-icon"><i class="fas fa-bolt"></i></div>
+                    <div class="music-details"><h4>Yarmak — Ветрами</h4><p>Hip Hop</p></div>
+                </div>
+                <div class="music-stats"><i class="fas fa-headphones"></i> 620k</div>
+                <button class="listen-btn" onclick="openKino('https://t.me/kinoglow_bot?start=music_yarmak_1')">Eshitish</button>
             </div>
-            <div class="music-item" onclick="openKino('https://t.me/Kinoglow_bot?start=music_uz_2')">
-                <div class="music-icon"><i class="fas fa-star"></i></div>
-                <div class="music-details"><h4>Hamdam Sobirov — Holimga qara</h4><p>O'zbekcha xit</p></div>
+
+            <div class="music-item">
+                <div class="music-left">
+                    <div class="music-rank">5</div>
+                    <div class="music-icon"><i class="fas fa-music"></i></div>
+                    <div class="music-details"><h4>Konsta — Havo</h4><p>Uzbek Hit</p></div>
+                </div>
+                <div class="music-stats"><i class="fas fa-headphones"></i> 511k</div>
+                <button class="listen-btn" onclick="openKino('https://t.me/kinoglow_bot?start=music_uz_1')">Eshitish</button>
             </div>
         </div>
     </div>
 
-    <!-- PROFIL SAHIFASI -->
     <div id="profile-page" class="page-content">
         <h2 class="section-title" id="profile-title" style="padding-top:20px;">Mening Profilim</h2>
         <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center;">
             <div style="font-size: 50px; color: #9d4edd; margin-bottom: 10px;"><i class="fas fa-user-circle"></i></div>
             <h3 id="user-name">Foydalanuvchi</h3>
-            <p style="color: #ffbc00; font-size: 14px; margin-top: 5px;" id="user-status">Status: Kinoglow Foydalanuvchisi</p>
+            <p style="color: #ffbc00; font-size: 14px; margin-top: 5px;" id="user-status">Status: Premium Foydalanuvchi</p>
         </div>
     </div>
 
-    <!-- NAVIGATSIYA PANELІ -->
     <div class="navbar">
         <div class="nav-item active" onclick="switchPage('home-page', this)"><i class="fas fa-home"></i><span id="nav-h">Asosiy</span></div>
         <div class="nav-item" onclick="switchPage('saved-page', this)"><i class="fas fa-bookmark"></i><span id="nav-s">Saqlanganlar</span></div>
@@ -786,7 +877,7 @@
         <div class="nav-item" onclick="switchPage('profile-page', this)"><i class="fas fa-user"></i><span id="nav-p">Profilim</span></div>
     </div>
 
-    <script {boundary}>
+    <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
@@ -794,35 +885,24 @@
 
         const langPack = {
             uz: {
-                search: "Kino yoki serial qidirish...",
-                catalog: "Katalog",
-                saved: "Saqlanganlar",
-                saved_em: "Siz saqlagan kinolar shu yerda ko'rinadi.",
-                vip_t: "VIP OBUNA REJALARI",
-                music: "Musiqalar Olamidan",
-                prof: "Mening Profilim",
+                search: "Kino kodini yoki nomini yozing...",
+                catalog: "Katalog", saved: "Saqlanganlar", saved_em: "Siz saqlagan kinolar shu yerda ko'rinadi.",
+                vip_t: "VIP OBUNA REJALARI", music: "Musiqalar Olamidan (Mutlaqo Bepul)", prof: "Mening Profilim",
                 nav_h: "Asosiy", nav_s: "Saqlanganlar", nav_m: "Musiqa", nav_p: "Profilim",
-                status: "Status: Kinoglow Foydalanuvchisi",
-                pay_alert: "Kinoglow loyihasini qo'llab quvvatlaganingiz uchun rahmat!"
+                status: "Status: Premium Foydalanuvchi", pay_alert: "Kinoglow loyihasini qo'llab-quvvatlaganingiz uchun rahmat!"
             },
             ru: {
-                search: "Поиск фильмов или сериалов...",
-                catalog: "Каталог",
-                saved: "Избранное",
-                saved_em: "Здесь будут отображаться сохраненные вами фильмы.",
-                vip_t: "VIP ПОДПИСКИ",
-                music: "Мир Музыки",
-                prof: "Мой Профиль",
+                search: "Введите код или название фильма...",
+                catalog: "Каталог", saved: "Избранное", saved_em: "Здесь будут отображаться ваши фильмы.",
+                vip_t: "VIP ПОДПИСКИ", music: "Мир Музыки (Бесплатно)", prof: "Мой Профиль",
                 nav_h: "Главная", nav_s: "Избранное", nav_m: "Музыка", nav_p: "Профиль",
-                status: "Статус: Пользователь Kinoglow",
-                pay_alert: "Спасибо за поддержку проекта Kinoglow!"
+                status: "Статус: Премиум Пользователь", pay_alert: "Спасибо за поддержку проекта Kinoglow!"
             }
         };
 
         function setLanguage(lang) {
             currentLang = lang;
             const p = langPack[lang];
-            
             document.getElementById('search-input').placeholder = p.search;
             document.getElementById('catalog-title').innerText = p.catalog;
             document.getElementById('saved-title').innerText = p.saved;
@@ -835,8 +915,34 @@
             document.getElementById('nav-m').innerText = p.nav_m;
             document.getElementById('nav-p').innerText = p.nav_p;
             document.getElementById('user-status').innerText = p.status;
-
             document.getElementById('language-overlay').style.display = 'none';
+        }
+
+        // Real vaqtda ko'rishlar sonini o'zgartirish (Simulyatsiya)
+        function updateRealTimeViews() {
+            document.querySelectorAll('.view-count').forEach(element => {
+                const baseViews = parseInt(element.getAttribute('data-base'));
+                // Har safar sahifa yuklanganda kichik va tasodifiy real vaqt ko'rishlarini qo'shamiz
+                const dynamicBonus = Math.floor(Math.random() * 45) + 5; 
+                const totalViews = baseViews + dynamicBonus;
+                
+                if (totalViews >= 1000) {
+                    element.innerHTML = `👁️ ${(totalViews / 1000).toFixed(1)}k`;
+                } else {
+                    element.innerHTML = `👁️ ${totalViews}`;
+                }
+            });
+        }
+
+        // YouTube musiqasini bosilganda kelgan joyidan (real vaqtda) faollashtirish
+        function startLiveMusic() {
+            const iframe = document.getElementById('live-iframe');
+            const placeholder = document.querySelector('.music-placeholder-btn');
+            
+            // Ishlaydigan va yangi mashhur Lofi/Musiqiy strim linki o'rnatildi
+            iframe.src = "https://www.youtube.com/embed/jfKfPfyJRdk?autoplay=1&mute=0&loop=1";
+            iframe.style.display = "block";
+            placeholder.style.display = "none";
         }
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -846,7 +952,6 @@
         function switchPage(pageId, element) {
             document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            
             document.getElementById(pageId).classList.add('active');
             element.classList.add('active');
         }
@@ -858,11 +963,10 @@
         function filterTab(type, element) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             element.classList.add('active');
-
             const cards = document.querySelectorAll('.movie-card');
             cards.forEach(card => {
                 if (type === 'all' || card.getAttribute('data-type') === type) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
@@ -875,7 +979,7 @@
             cards.forEach(card => {
                 const title = card.getAttribute('data-title');
                 if (title.includes(query)) {
-                    card.style.display = 'block';
+                    card.style.display = 'flex';
                 } else {
                     card.style.display = 'none';
                 }
@@ -885,6 +989,9 @@
         function payVIP(amount) {
             tg.showAlert(langPack[currentLang].pay_alert);
         }
+
+        // Sahifa tayyor bo'lganda ko'rishlarni hisoblashni ishga tushiramiz
+        window.onload = updateRealTimeViews;
     </script>
 </body>
 </html>
