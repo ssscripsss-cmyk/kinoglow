@@ -1,542 +1,220 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kinoglow | Rasmiy Mini App</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            -webkit-user-select: none;
-            user-select: none;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kinoglow</title>
 
-        body {
-            background: #0d0221;
-            color: #ffffff;
-            overflow-x: hidden;
-            padding-bottom: 90px;
-        }
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-        .universe-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 50%, #1b053a 0%, #05010d 100%);
-            z-index: -2;
-        }
+<style>
 
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: url('https://www.transparenttextures.com/patterns/stardust.png');
-            opacity: 0.3;
-        }
+body{
+margin:0;
+font-family:Arial;
+background:#05010d;
+color:white;
+overflow-x:hidden;
+}
 
-        #language-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #0d0221;
-            z-index: 200;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 20px;
-        }
+/* 🌌 KO'K YULDUZLI FON */
+.stars{
+position:fixed;
+width:100%;
+height:100%;
+top:0;
+left:0;
+background:url('https://www.transparenttextures.com/patterns/stardust.png');
+opacity:0.4;
+animation:move 120s linear infinite;
+z-index:-1;
+}
 
-        .lang-btn {
-            width: 220px;
-            padding: 15px;
-            background: rgba(157, 78, 221, 0.2);
-            border: 2px solid #9d4edd;
-            border-radius: 30px;
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
+@keyframes move{
+from{transform:translateY(0);}
+to{transform:translateY(-1000px);}
+}
 
-        .lang-btn:hover {
-            background: #ff007f;
-            border-color: #ff007f;
-        }
+/* HEADER */
+header{
+text-align:center;
+padding:20px;
+font-size:24px;
+font-weight:bold;
+text-shadow:0 0 10px #9d4edd;
+}
 
-        .header {
-            text-align: center;
-            padding: 20px 15px 10px;
-        }
+header span{color:#ff007f}
 
-        .bot-logo {
-            font-size: 26px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #fff;
-            text-shadow: 0 0 10px #9d4edd;
-        }
+/* NAV */
+.nav{
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+background:#0d0221;
+padding:10px 0;
+border-top:1px solid #333;
+}
 
-        .bot-logo span {
-            color: #ff007f;
-        }
+.nav div{
+text-align:center;
+font-size:12px;
+color:#aaa;
+cursor:pointer;
+}
 
-        .search-container {
-            padding: 0 15px;
-            margin-bottom: 15px;
-        }
+.nav div.active{
+color:#ff007f;
+}
 
-        .search-bar {
-            width: 100%;
-            padding: 12px 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(157, 78, 221, 0.3);
-            border-radius: 25px;
-            color: white;
-            outline: none;
-        }
+/* PAGE */
+.page{
+display:none;
+padding:15px;
+}
 
-        .filter-tabs {
-            display: flex;
-            gap: 10px;
-            padding: 0 15px;
-            margin-bottom: 20px;
-            overflow-x: auto;
-        }
+.page.active{
+display:block;
+}
 
-        .tab {
-            padding: 8px 18px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(157, 78, 221, 0.3);
-            border-radius: 20px;
-            font-size: 14px;
-            white-space: nowrap;
-            cursor: pointer;
-        }
+/* CARDS */
+.card{
+background:#120022;
+padding:10px;
+margin:10px 0;
+border-radius:12px;
+box-shadow:0 0 10px #9d4edd33;
+}
 
-        .tab.active {
-            background: #9d4edd;
-            border-color: #ff007f;
-        }
+button{
+background:#9d4edd;
+border:none;
+padding:8px;
+color:white;
+border-radius:8px;
+width:100%;
+margin-top:5px;
+cursor:pointer;
+}
 
-        .page-content {
-            display: none;
-            padding: 0 15px;
-        }
+button:hover{
+background:#ff007f;
+}
 
-        .page-content.active {
-            display: block;
-        }
-
-        .section-title {
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-
-        .movies-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-        }
-
-        .movie-card {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(157, 78, 221, 0.15);
-            border-radius: 12px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .movie-img-container {
-            position: relative;
-            width: 100%;
-            height: 140px;
-            background: #14092b;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .movie-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .no-img-placeholder {
-            font-size: 32px;
-            color: rgba(157, 78, 221, 0.4);
-        }
-
-        .badge-type {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-        }
-
-        .badge-free {
-            position: absolute;
-            top: 8px;
-            left: 8px;
-            background: linear-gradient(45deg, #00f0ff, #00ff66);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: bold;
-            color: #000;
-        }
-
-        .movie-info {
-            padding: 8px;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .movie-title {
-            font-size: 13px;
-            font-weight: 600;
-            color: #fff;
-            margin-bottom: 6px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-            height: 36px;
-        }
-
-        .movie-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #aaa;
-            margin-bottom: 8px;
-        }
-
-        .go-bot-btn {
-            width: 100%;
-            padding: 10px;
-            background: linear-gradient(45deg, #0077b6, #00b4d8);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            text-align: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-            transition: 0.2s;
-        }
-
-        .go-bot-btn:active {
-            transform: scale(0.97);
-        }
-
-        .empty-state {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 40px 20px;
-            color: #aaa;
-            font-size: 14px;
-        }
-
-        .empty-state i {
-            font-size: 40px;
-            color: rgba(157, 78, 221, 0.3);
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        /* VIP */
-        .vip-card {
-            background: linear-gradient(135deg, rgba(36, 0, 70, 0.7), rgba(157, 78, 221, 0.3));
-            border: 1px solid #9d4edd;
-            border-radius: 15px;
-            padding: 15px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .vip-price {
-            font-size: 22px;
-            font-weight: bold;
-            margin: 5px 0;
-            color: #00f0ff;
-        }
-
-        .vip-btn {
-            width: 100%;
-            padding: 10px;
-            background: linear-gradient(45deg, #9d4edd, #ff007f);
-            border: none;
-            border-radius: 20px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        /* NAVBAR */
-        .navbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 65px;
-            background: rgba(13, 2, 33, 0.95);
-            border-top: 1px solid rgba(157, 78, 221, 0.2);
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #8a8194;
-            font-size: 11px;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .nav-item i {
-            font-size: 18px;
-            margin-bottom: 4px;
-        }
-
-        .nav-item.active {
-            color: #ff007f;
-            text-shadow: 0 0 8px #ff007f;
-        }
-    </style>
+</style>
 </head>
+
 <body>
 
-    <div class="universe-bg"></div>
-    <div class="stars"></div>
+<div class="stars"></div>
 
-    <!-- TIL TANLASH OYNASI -->
-    <div id="language-overlay">
-        <div class="bot-logo">Kinoglow<span>.uz</span></div>
-        <button class="lang-btn" onclick="setLanguage('uz')">🇺🇿 O'zbekcha</button>
-        <button class="lang-btn" onclick="setLanguage('ru')">🇷🇺 Русский</button>
-    </div>
+<header>Kinoglow<span>.uz</span></header>
 
-    <!-- ASOSIY SAHIFA -->
-    <div id="home-page" class="page-content active">
-        <div class="header">
-            <div class="bot-logo">Kinoglow<span>.uz</span></div>
-        </div>
+<!-- HOME -->
+<div id="home" class="page active">
+<h3>🎬 Kinolar</h3>
 
-        <div class="search-container">
-            <input type="text" id="search-input" class="search-bar" placeholder="Kino kodini yoki nomini yozing..." oninput="filterContent()">
-        </div>
+<div class="card">
+Interstellar
+<button onclick="openMovie('Interstellar')">Ko‘rish</button>
+</div>
 
-        <div class="filter-tabs">
-            <div class="tab active" onclick="filterTab('all', this)" id="tab-all">Hammasi</div>
-            <div class="tab" onclick="filterTab('kino', this)" id="tab-movies">Kinolar</div>
-            <div class="tab" onclick="filterTab('serial', this)" id="tab-series">Seriallar</div>
-        </div>
+<div class="card">
+Avengers
+<button onclick="openMovie('Avengers')">Ko‘rish</button>
+</div>
 
-        <h2 class="section-title" id="catalog-title">Katalog</h2>
-        
-        <!-- FILMLAR SETKASI (MUTLAQO BO'SH - FAQAT O'ZINGIZ QO'SHASIZ) -->
-        <div class="movies-grid" id="movies-container">
-            
-            <!-- YANGI KINOLARNI SHU YERDAN BOSHLAB NUSXALAB QO'SHASIZ -->
-            <!-- MIZOLLAR OCHIB TASHLANDI -->
+</div>
 
-            <div class="empty-state" id="no-movies-msg">
-                <i class="fas fa-film"></i>
-                <span id="empty-text">Katalog hozircha bo'sh. Kinolarni HTML kod orqali qo'shing.</span>
-            </div>
+<!-- MUSIC -->
+<div id="music" class="page">
 
-        </div>
-    </div>
+<h3>🎵 Musiqa</h3>
 
-    <!-- SAQLANGANLAR -->
-    <div id="saved-page" class="page-content">
-        <h2 class="section-title" id="saved-title" style="padding-top:20px;">Saqlanganlar</h2>
-        <p id="saved-empty" style="color: #aaa; text-align: center; margin-top: 40px;">Siz saqlagan kinolar shu yerda ko'rinadi.</p>
-    </div>
+<div class="card">
+Imagine Dragons - Believer
+<button onclick="openMusic('Believer')">Eshitish</button>
+</div>
 
-    <!-- VIP -->
-    <div id="vip-page" class="page-content">
-        <h2 class="section-title" id="vip-main-title" style="padding-top:20px; text-align:center; color:#ffbc00;">VIP OBUNA REJALARI</h2>
-        <div class="vip-card">
-            <h3>1 Oylik VIP</h3>
-            <div class="vip-price">100 ⭐️ Stars</div>
-            <button class="vip-btn" onclick="payVIP(100)">Obuna bo'lish</button>
-        </div>
-    </div>
+<div class="card">
+Alan Walker - Faded
+<button onclick="openMusic('Faded')">Eshitish</button>
+</div>
 
-    <!-- PROFIL -->
-    <div id="profile-page" class="page-content">
-        <h2 class="section-title" id="profile-title" style="padding-top:20px;">Mening Profilim</h2>
-        <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; text-align: center;">
-            <div style="font-size: 50px; color: #9d4edd; margin-bottom: 10px;"><i class="fas fa-user-circle"></i></div>
-            <h3 id="user-name">Foydalanuvchi</h3>
-            <p style="color: #ffbc00; font-size: 14px; margin-top: 5px;" id="user-status">Status: Premium Foydalanuvchi</p>
-        </div>
-    </div>
+</div>
 
-    <!-- NAVBAR -->
-    <div class="navbar">
-        <div class="nav-item active" onclick="switchPage('home-page', this)"><i class="fas fa-home"></i><span id="nav-h">Asosiy</span></div>
-        <div class="nav-item" onclick="switchPage('saved-page', this)"><i class="fas fa-bookmark"></i><span id="nav-s">Saqlanganlar</span></div>
-        <div class="nav-item" onclick="switchPage('vip-page', this)"><i class="fas fa-star"></i><span>VIP</span></div>
-        <div class="nav-item" onclick="switchPage('profile-page', this)"><i class="fas fa-user"></i><span id="nav-p">Profilim</span></div>
-    </div>
+<!-- VIP -->
+<div id="vip" class="page">
 
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+<h3>👑 VIP</h3>
 
-        let currentLang = 'uz';
-        
-        // KO'RISHLARNI 0 DAN BOSHLASH JADVALI (BO'SH HOLATDA)
-        const viewData = {};
+<div class="card">1 oy - 100 ⭐</div>
+<div class="card">3 oy - 200 ⭐</div>
+<div class="card">6 oy - 300 ⭐</div>
+<div class="card">1 yil - 400 ⭐</div>
 
-        const langPack = {
-            uz: {
-                search: "Kino kodini yoki nomini yozing...",
-                catalog: "Katalog", saved: "Saqlanganlar", saved_em: "Siz saqlagan kinolar shu yerda ko'rinadi.",
-                vip_t: "VIP OBUNA REJALARI", prof: "Mening Profilim",
-                nav_h: "Asosiy", nav_s: "Saqlanganlar", nav_p: "Profilim",
-                status: "Status: Premium Foydalanuvchi", pay_alert: "Botda kino kodini yozib tomosha qiling!",
-                empty: "Katalog hozircha bo'sh. Kinolarni HTML kod orqali qo'shing."
-            },
-            ru: {
-                search: "Введите код или название фильма...",
-                catalog: "Каталог", saved: "Избранное", saved_em: "Здесь будут отображаться ваши фильмы.",
-                vip_t: "VIP ПОДПИСКИ", prof: "Мой Профиль",
-                nav_h: "Главная", nav_s: "Избранное", nav_p: "Профиль",
-                status: "Статус: Премиум Пользователь", pay_alert: "Введите код фильма в боте для просмотра!",
-                empty: "Каталог пока пуст. Добавьте фильмы через HTML код."
-            }
-        };
+</div>
 
-        function setLanguage(lang) {
-            currentLang = lang;
-            const p = langPack[lang];
-            document.getElementById('search-input').placeholder = p.search;
-            document.getElementById('catalog-title').innerText = p.catalog;
-            document.getElementById('saved-title').innerText = p.saved;
-            document.getElementById('saved-empty').innerText = p.saved_em;
-            document.getElementById('vip-main-title').innerText = p.vip_t;
-            document.getElementById('profile-title').innerText = p.prof;
-            document.getElementById('nav-h').innerText = p.nav_h;
-            document.getElementById('nav-s').innerText = p.nav_s;
-            document.getElementById('nav-p').innerText = p.nav_p;
-            document.getElementById('user-status').innerText = p.status;
-            if(document.getElementById('empty-text')) {
-                document.getElementById('empty-text').innerText = p.empty;
-            }
-            document.getElementById('language-overlay').style.display = 'none';
-            
-            startRealTimeViews();
-        }
+<!-- PROFILE -->
+<div id="profile" class="page">
 
-        function startRealTimeViews() {
-            Object.keys(viewData).forEach(id => {
-                const el = document.getElementById(`view-${id}`);
-                if(el) el.innerHTML = `👁️ ${viewData[id]}`;
-            });
+<h3>👤 Profil</h3>
 
-            setInterval(() => {
-                Object.keys(viewData).forEach(id => {
-                    viewData[id] += Math.floor(Math.random() * 4) + 1;
-                    const el = document.getElementById(`view-${id}`);
-                    if(el) el.innerHTML = `👁️ ${viewData[id]}`;
-                });
-            }, 3000);
-        }
+<div class="card">
+Telegram foydalanuvchi
+</div>
 
-        function openKino(kinoId) {
-            tg.showAlert(`Kino kodi: ${kinoId}
+</div>
 
-Botga kirgach, ushbu kodni yuboring va kinoni tomosha qiling! 🎬`);
-            setTimeout(() => {
-                tg.openTelegramLink('https://t.me/kinoglow_bot');
-            }, 1200);
-        }
+<!-- NAV -->
+<div class="nav">
+<div class="active" onclick="show('home',this)">🏠</div>
+<div onclick="show('music',this)">🎵</div>
+<div onclick="show('vip',this)">⭐</div>
+<div onclick="show('profile',this)">👤</div>
+</div>
 
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
-        }
+<script>
 
-        function switchPage(pageId, element) {
-            document.querySelectorAll('.page-content').forEach(page => page.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.getElementById(pageId).classList.add('active');
-            element.classList.add('active');
-        }
+const tg = window.Telegram.WebApp;
+tg.expand();
 
-        function filterTab(type, element) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            element.classList.add('active');
-            const cards = document.querySelectorAll('.movie-card');
-            
-            let hasVisible = false;
-            cards.forEach(card => {
-                if (type === 'all' || card.getAttribute('data-type') === type) {
-                    card.style.display = 'flex';
-                    hasVisible = true;
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+/* PAGE SWITCH */
+function show(id,el){
+document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+document.querySelectorAll('.nav div').forEach(n=>n.classList.remove('active'));
 
-            const emptyMsg = document.getElementById('no-movies-msg');
-            if(emptyMsg) {
-                emptyMsg.style.display = (hasVisible || cards.length > 0) ? 'none' : 'block';
-            }
-        }
+document.getElementById(id).classList.add('active');
+el.classList.add('active');
+}
 
-        function filterContent() {
-            const query = document.getElementById('search-input').value.toLowerCase();
-            const cards = document.querySelectorAll('.movie-card');
-            cards.forEach(card => {
-                const title = card.getAttribute('data-title');
-                if (title.includes(query)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+/* MOVIE CLICK */
+function openMovie(name){
+addView(name);
+tg.showAlert("🎬 Kino: " + name);
+}
 
-        function payVIP(amount) {
-            tg.showAlert(langPack[currentLang].pay_alert);
-        }
-    </script>
-</body>
-</html>
+/* MUSIC CLICK */
+function openMusic(name){
+addView(name);
+tg.showAlert("🎵 Musiqa: " + name);
+}
+
+/* ⭐ VIEW SYSTEM */
+let views = JSON.parse(localStorage.getItem("views") || "{}");
+
+function addView(id){
+if(!views[id]) views[id] = 0;
+views[id] += 1;
+localStorage.setItem("views", JSON.stringify(views));
+}
+
+/* VIP */
+function buyVIP(plan){
+tg.showAlert("⭐ VIP tanlandi: " + plan);
+}
+
+</script>
