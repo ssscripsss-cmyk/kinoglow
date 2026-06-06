@@ -64,7 +64,7 @@
             100% { text-shadow: 0 0 25px #ff6600, 0 0 40px #ff3300; transform: scale(1.02); }
         }
 
-        /* Qidiruv va Tablar */
+        /* Qidiruv */
         .search-container { padding: 0 20px; margin-bottom: 25px; }
         .search-bar {
             width: 100%; padding: 16px 25px; background: rgba(17, 5, 31, 0.75);
@@ -72,11 +72,6 @@
             box-shadow: 0 0 15px rgba(138, 43, 226, 0.2); transition: all 0.4s;
         }
         .search-bar:focus { border-color: #ff6600; box-shadow: 0 0 25px rgba(255, 102, 0, 0.45); }
-        
-        .filter-tabs { display: flex; gap: 12px; padding: 0 20px; margin-bottom: 25px; overflow-x: auto; }
-        .filter-tabs::-webkit-scrollbar { display: none; }
-        .tab { padding: 11px 24px; background: rgba(21, 7, 36, 0.5); border: 1px solid rgba(138, 43, 226, 0.4); border-radius: 14px; font-size: 14px; font-weight: 600; color: #cbbad6; cursor: pointer; }
-        .tab.active { background: linear-gradient(135deg, #8a2be2, #ff6600); border-color: transparent; color: #ffffff; box-shadow: 0 0 20px rgba(255, 102, 0, 0.4); }
 
         /* Sahifalar */
         .page-content { display: none; padding: 0 20px; animation: cubicBlurIn 0.5s ease; }
@@ -91,10 +86,36 @@
             background: linear-gradient(135deg, rgba(23, 7, 38, 0.85) 0%, rgba(11, 2, 20, 0.95) 100%);
             border: 1px solid rgba(138, 43, 226, 0.3); border-radius: 20px; overflow: hidden;
             display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.6); transition: all 0.4s;
+            position: relative;
         }
         .movie-card:hover { border-color: #ff6600; box-shadow: 0 0 25px rgba(255, 102, 0, 0.35); transform: translateY(-5px); }
         .movie-img-container { position: relative; width: 100%; height: 155px; background: linear-gradient(45deg, #120321, #260742); display: flex; align-items: center; justify-content: center; }
         .badge-premium { position: absolute; top: 12px; left: 12px; background: linear-gradient(45deg, #ff6600, #ffaa00); padding: 4px 9px; border-radius: 7px; font-size: 10px; font-weight: 800; color: #000; box-shadow: 0 0 12px rgba(255, 102, 0, 0.5); }
+        
+        /* 🔔 SAQLASH TUGMASI (NEON) */
+        .save-btn {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
+            background: rgba(5, 1, 13, 0.8);
+            border: 1px solid #8a2be2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #b388ff;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s;
+        }
+        .save-btn.saved {
+            border-color: #ff6600;
+            color: #ff6600;
+            box-shadow: 0 0 15px #ff6600;
+        }
+
         .movie-info { padding: 16px; display: flex; flex-direction: column; justify-content: space-between; flex-grow: 1; }
         .movie-title { font-size: 14px; font-weight: 600; height: 38px; overflow: hidden; margin-bottom: 12px; color: #f3ebfc; }
         .movie-meta { display: flex; justify-content: space-between; font-size: 12px; color: #a497b8; margin-bottom: 14px; }
@@ -107,48 +128,30 @@
         }
         .card-btn:hover { box-shadow: 0 0 20px rgba(255, 102, 0, 0.6); }
 
-        /* 🚨 IN-APP NEON PLEYER DIZAYNI */
-        .player-page {
-            display: none;
-            padding: 0 20px;
-            animation: cubicBlurIn 0.4s ease;
+        /* VIP va Profil Qutilari */
+        .vip-box {
+            background: linear-gradient(135deg, rgba(32, 6, 56, 0.85) 0%, rgba(255, 102, 0, 0.08) 100%);
+            border: 2px solid #ff6600; box-shadow: 0 0 30px rgba(255, 102, 0, 0.35);
+            border-radius: 24px; padding: 40px 25px; text-align: center; margin-top: 20px; backdrop-filter: blur(12px);
         }
-        .player-wrapper {
-            background: #0d041a;
-            border: 2px solid #ff6600;
-            box-shadow: 0 0 35px rgba(255, 102, 0, 0.4);
-            border-radius: 24px;
-            padding: 12px;
-            margin-bottom: 20px;
-        }
-        video {
-            width: 100%;
-            border-radius: 16px;
-            display: block;
-            outline: none;
-            background: #000;
-        }
-        .player-info {
-            padding: 15px 5px;
-        }
-        .player-title {
-            font-size: 20px;
-            font-weight: 800;
-            color: #ffffff;
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px rgba(255,255,255,0.2);
-        }
+        .vip-price { font-family: 'Orbitron', sans-serif; font-size: 34px; color: #ff6600; font-weight: 900; margin: 22px 0; text-shadow: 0 0 15px rgba(255, 102, 0, 0.7); }
 
-        /* Navigatsiya */
+        /* Pleyer Sahifasi */
+        .player-page { display: none; padding: 0 20px; animation: cubicBlurIn 0.4s ease; }
+        .player-wrapper { background: #0d041a; border: 2px solid #ff6600; box-shadow: 0 0 35px rgba(255, 102, 0, 0.4); border-radius: 24px; padding: 12px; margin-bottom: 20px; }
+        video { width: 100%; border-radius: 16px; display: block; outline: none; background: #000; }
+        .player-title { font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 8px; }
+
+        /* Navigatsiya Bar */
         .navbar {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 72px; background: rgba(5, 1, 13, 0.94);
             border-top: 2px solid rgba(138, 43, 226, 0.7); box-shadow: 0 -10px 30px rgba(138, 43, 226, 0.3);
             display: flex; justify-content: space-around; align-items: center; backdrop-filter: blur(20px); z-index: 100;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9283a8; font-size: 11px; font-weight: 600; cursor: pointer; width: 65px; transition: all 0.3s; }
-        .nav-item i { font-size: 21px; margin-bottom: 5px; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #9283a8; font-size: 11px; font-weight: 600; cursor: pointer; width: 60px; transition: all 0.3s; }
+        .nav-item i { font-size: 20px; margin-bottom: 5px; }
         .nav-item.active { color: #ff6600; text-shadow: 0 0 12px rgba(255, 102, 0, 0.6); }
-        .nav-item.active i { transform: translateY(-5px) scale(1.15); }
+        .nav-item.active i { transform: translateY(-5px) scale(1.1); }
     </style>
 </head>
 <body>
@@ -161,15 +164,19 @@
     </div>
 
     <div class="search-container" id="search-box">
-        <input type="text" class="search-bar" placeholder="Kino yoki musiqa qidirish...">
+        <input type="text" class="search-bar" placeholder="Kino yoki obunalarni qidirish...">
     </div>
 
     <!-- 🎬 KINOLAR SAHIFASI -->
     <div id="home-page" class="page-content active">
         <h2 class="section-title">Kiber Premyeralar</h2>
         <div class="movies-grid">
-            <!-- 1-Kino (Test havolasi qo'yilgan) -->
-            <div class="movie-card">
+            
+            <!-- 1-Kino -->
+            <div class="movie-card" id="card-101">
+                <button class="save-btn" onclick="toggleSave(101, 'Avatar: Suv yo\'li', '2022', '4K ULTRA', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">
+                    <i class="fas fa-bookmark"></i>
+                </button>
                 <div class="movie-img-container">
                     <span class="badge-premium">4K ULTRA</span>
                     <i class="fas fa-film" style="font-size:46px; color: #ff6600;"></i>
@@ -177,12 +184,15 @@
                 <div class="movie-info">
                     <div class="movie-title">Avatar: Suv yo'li (Premium)</div>
                     <div class="movie-meta"><span>2022</span><span>👁️ 8.9k</span></div>
-                    <!-- Haqiqiy mp4 video linkini 'url' ichiga yozasiz -->
                     <button class="card-btn" onclick="openInAppPlayer('Avatar: Suv yo\'li', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4')">🚀 Tomosha Qilish</button>
                 </div>
             </div>
+
             <!-- 2-Kino -->
-            <div class="movie-card">
+            <div class="movie-card" id="card-102">
+                <button class="save-btn" onclick="toggleSave(102, 'Interstellar', '2014', 'HD 1080p', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4')">
+                    <i class="fas fa-bookmark"></i>
+                </button>
                 <div class="movie-img-container">
                     <span class="badge-premium">HD 1080p</span>
                     <i class="fas fa-film" style="font-size:46px; color: #8a2be2;"></i>
@@ -193,15 +203,50 @@
                     <button class="card-btn" onclick="openInAppPlayer('Interstellar', 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4')">🚀 Tomosha Qilish</button>
                 </div>
             </div>
+
         </div>
     </div>
 
-    <!-- 📺 IN-APP NEON VIDEO PLEYER SAHIFASI -->
+    <!-- 📥 SAQLANGANLAR SAHIFASI -->
+    <div id="saved-page" class="page-content">
+        <h2 class="section-title">Saqlangan Kinolar</h2>
+        <div class="movies-grid" id="saved-movies-container">
+            <!-- Saqlangan kinolar JavaScript orqali shu yerga dinamik tushadi -->
+             <p id="no-saved-text" style="color: #a497b8; grid-column: span 2; text-align: center; padding: 20px;">Hech qanday kino saqlanmagan.</p>
+        </div>
+    </div>
+
+    <!-- ⚡️ OBUNA (VIP) SAHIFASI -->
+    <div id="vip-page" class="page-content">
+        <div class="vip-box">
+            <i class="fas fa-bolt" style="font-size: 55px; color: #ff6600; text-shadow: 0 0 20px #ff6600; margin-bottom: 12px;"></i>
+            <h2 style="color: #ffffff; font-weight: 800; font-family: 'Orbitron', sans-serif; letter-spacing: 1px;">VIP OBUNA</h2>
+            <p style="margin-top: 15px; color: #cbbad6; font-size:14px; line-height: 1.6;">
+                Barcha yangi premyeralarni reklamasiz, cheklovlarsiz va maksimal kiber tezlikda tomosha qiling!
+            </p>
+            <div class="vip-price">100 STARS</div>
+            <button class="card-btn" style="border-radius:16px; padding:15px; font-size:14px; font-weight: 800; text-transform: uppercase;">Faollashtirish</button>
+        </div>
+    </div>
+
+    <!-- 👤 PROFIL SAHIFASI -->
+    <div id="profile-page" class="page-content">
+        <div class="vip-box" style="border-color: #8a2be2; box-shadow: 0 0 25px rgba(138, 43, 226, 0.35);">
+            <i class="fas fa-user-astronaut" style="font-size:65px; color:#ff6600; text-shadow: 0 0 20px #ff6600; margin-bottom:15px;"></i>
+            <h3 id="user-name" style="font-size: 22px; font-family:'Orbitron', sans-serif; letter-spacing: 1px;">Kiber Navigator</h3>
+            <p style="color:#b388ff; font-size:14px; font-weight:600; margin-top:8px;">Status: Premium Kosmonavt</p>
+            <div style="margin-top: 20px; border-top: 1px solid rgba(138,43,226,0.3); padding-top: 15px; font-size: 13px; color: #a497b8; text-align: left;">
+                <p style="margin-bottom: 8px;"><i class="fas fa-ticket-alt" style="color: #ff6600;"></i> Balans: 0 Stars</p>
+                <p><i class="fas fa-history" style="color: #8a2be2;"></i> Ko'rilgan kinolar: 2 ta</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📺 IN-APP VIDEO PLEYER SAHIFASI -->
     <div id="player-page" class="player-page">
         <div class="player-wrapper">
             <video id="neon-html5-player" controls playsinline>
                 <source id="player-source" src="" type="video/mp4">
-                Brauzeringiz videoni qo'llab-quvvatlamaydi.
             </video>
         </div>
         <div class="player-info">
@@ -211,19 +256,22 @@
         </div>
     </div>
 
-    <!-- 📱 BOTTOM NAVBAR -->
+    <!-- 📱 BOTTOM NAVBAR (YANGILANGAN MENYU) -->
     <div class="navbar">
         <div class="nav-item active" onclick="switchPage('home-page', this)"><i class="fas fa-film"></i><span>Kinolar</span></div>
-        <div class="nav-item" onclick="switchPage('player-page', this)" style="display:none;" id="nav-hidden-player"></div>
+        <div class="nav-item" onclick="switchPage('saved-page', this)"><i class="fas fa-bookmark"></i><span>Saqlanganlar</span></div>
+        <div class="nav-item" onclick="switchPage('vip-page', this)"><i class="fas fa-bolt"></i><span>Obuna</span></div>
+        <div class="nav-item" onclick="switchPage('profile-page', this)"><i class="fas fa-user-astronaut"></i><span>Profil</span></div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
 
-        // Sahifalarni almashtirish funksiyasi
+        // Saqlangan kinolar massivi (Xotirada saqlanadi)
+        let savedMovies = [];
+
         function switchPage(pageId, element) {
-            // Videoni to'xtatish (agar pleyerdan chiqib ketsa)
             if (pageId !== 'player-page') {
                 document.getElementById('neon-html5-player').pause();
             }
@@ -234,7 +282,6 @@
             document.getElementById(pageId).style.display = 'block';
             if(element) element.classList.add('active');
 
-            // Header va qidiruvni pleyerda yashirish
             if (pageId === 'player-page') {
                 document.getElementById('main-header').style.display = 'none';
                 document.getElementById('search-box').style.display = 'none';
@@ -242,9 +289,70 @@
                 document.getElementById('main-header').style.display = 'block';
                 document.getElementById('search-box').style.display = 'block';
             }
+
+            if(pageId === 'saved-page') {
+                renderSavedMovies();
+            }
         }
 
-        // Mini App ichida pleyerni ochish va videoni qo'yish
+        // Saqlash/O'chirish funksiyasi
+        function toggleSave(id, title, year, quality, url) {
+            const index = savedMovies.findIndex(m => m.id === id);
+            const cardBtn = document.querySelector(`#card-${id} .save-btn`);
+            
+            if (index === -1) {
+                // Saqlash
+                savedMovies.push({ id, title, year, quality, url });
+                if(cardBtn) cardBtn.classList.add('saved');
+            } else {
+                // O'chirish
+                savedMovies.splice(index, 1);
+                if(cardBtn) cardBtn.classList.remove('saved');
+            }
+            
+            // Agar saqlanganlar sahifasida bo'lsa, real vaqtda yangilash
+            if(document.getElementById('saved-page').style.display === 'block') {
+                renderSavedMovies();
+            }
+        }
+
+        // Saqlangan kinolarni ekranga chiqarish
+        function renderSavedMovies() {
+            const container = document.getElementById('saved-movies-container');
+            const noText = document.getElementById('no-saved-text');
+            
+            // Tozalash
+            container.querySelectorAll('.movie-card').forEach(el => el.remove());
+            
+            if(savedMovies.length === 0) {
+                noText.style.display = 'block';
+                return;
+            }
+            
+            noText.style.display = 'none';
+            
+            savedMovies.forEach(movie => {
+                const card = document.createElement('div');
+                card.className = 'movie-card';
+                card.id = `saved-card-${movie.id}`;
+                card.innerHTML = `
+                    <button class="save-btn saved" onclick="toggleSave(${movie.id}, '${movie.title}', '${movie.year}', '${movie.quality}', '${movie.url}')">
+                        <i class="fas fa-bookmark"></i>
+                    </button>
+                    <div class="movie-img-container">
+                        <span class="badge-premium">${movie.quality}</span>
+                        <i class="fas fa-film" style="font-size:46px; color: #ff6600;"></i>
+                    </div>
+                    <div class="movie-info">
+                        <div class="movie-title">${movie.title}</div>
+                        <div class="movie-meta"><span>${movie.year}</span><span>⭐ Saved</span></div>
+                        <button class="card-btn" onclick="openInAppPlayer('${movie.title}', '${movie.url}')">🚀 Tomosha Qilish</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
         function openInAppPlayer(title, videoUrl) {
             const player = document.getElementById('neon-html5-player');
             const source = document.getElementById('player-source');
@@ -256,14 +364,15 @@
             switchPage('player-page', null);
             
             player.load();
-            player.play().catch(error => {
-                console.log("Avtomatik ijro etish bloklandi, foydalanuvchi bosishi kutilmoqda.");
-            });
+            player.play().catch(e => console.log("Play error"));
         }
 
-        // Pleyerni yopib ortga qaytish
         function closeInAppPlayer() {
             switchPage('home-page', document.querySelector('.nav-item'));
+        }
+
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('user-name').innerText = tg.initDataUnsafe.user.first_name;
         }
     </script>
 </body>
